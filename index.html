@@ -150,6 +150,20 @@
       0%,100% { transform: translateY(0); }
       50% { transform: translateY(-12px); }
     }
+    @keyframes confettiFall {
+      0% { transform: translateY(-40px) rotate(0deg) scale(1); opacity: 1; }
+      80% { opacity: 1; }
+      100% { transform: translateY(120vh) rotate(720deg) scale(0.5); opacity: 0; }
+    }
+    @keyframes correctPop {
+      0% { transform: scale(0.7); opacity: 0; }
+      60% { transform: scale(1.12); opacity: 1; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    @keyframes shimmer {
+      0% { background-position: -200% center; }
+      100% { background-position: 200% center; }
+    }
   </style>
 </head>
 <body>
@@ -421,6 +435,8 @@ const WEEK_CONTENT = {
     quote:"עוֹלָם חֶסֶד יִבָּנֶה", translation:"The world is built on kindness. (Psalm 89:3)",
     learning:"Chesed is expansive love. Abraham's tent had four doors so he could see guests coming from any direction. Kindness is not just being nice — it is actively looking for opportunities to give.",
     discussion:"If Chesed is 'giving without limits,' is there ever a time where giving too much might be a problem?",
+    discussionYounger:"Can you think of a time you did something kind for someone without being asked? How did that feel?",
+    discussionOlder:"If Chesed is 'giving without limits,' is there ever a time where giving too much might be a problem? What's the difference between kindness and enabling?",
     game:{ title:"Chesed Secret Charades", type:"charades",
       instructions:"Click 'New Guessers' to pick 3 students. Then click 'Reveal' to show the actor their task.",
       tasks:["Helping carry groceries","Sharing an umbrella","Comforting a friend","Donating a toy","Planting a tree"] }
@@ -431,6 +447,8 @@ const WEEK_CONTENT = {
     quote:"אֵיזֶהוּ גִבּוֹר? הַכּוֹבֵשׁ אֶת יִצְרוֹ", translation:"Who is strong? One who masters their own impulses. (Pirkei Avot 4:1)",
     learning:"Gevurah is 'Strength' through boundaries. Just as a dam holds back water to create power, Gevurah focuses our energy. It is the strength to say 'No' to ourselves.",
     discussion:"Why do we need rules? If there were no rules in soccer or chess, would the game still be fun?",
+    discussionYounger:"What's a rule at home or school that you think is actually fair? Why does it exist?",
+    discussionOlder:"Why do we need rules? If there were no rules in soccer or chess, would the game still be fun? What's the difference between a rule that limits you and one that actually sets you free?",
     game:{ title:"The Gevurah Shield", type:"sort",
       instructions:"Select ONLY the Boundary behaviors to build the shield. Choosing Chaos breaks it!",
       items:[
@@ -448,11 +466,13 @@ const WEEK_CONTENT = {
     translation:"Righteousness and justice are the foundation of Your throne; kindness and truth go before You. (Psalm 89:15)",
     learning:"Tiferet is the 'Beautiful Balance.' It sits at the heart of the Sefirot tree, combining the unlimited giving of Chesed with the focused discipline of Gevurah to create Rachamim — Compassion.",
     discussion:"Think of a time you were both firm (Gevurah) AND kind (Chesed) at the same time. How did that feel?",
+    discussionYounger:"Have you ever told a friend the truth even though it was hard? What happened?",
+    discussionOlder:"Think of a time you were both firm (Gevurah) AND kind (Chesed) at the same time. Is it possible to be honest with someone while also being compassionate? What's the hardest part?",
     game:{ title:"Harmony Match-Up", type:"matching",
       instructions:"Click an Action on the left, then click its Sefirah on the right.",
       pairs:[
         { q:"Giving an anonymous gift", a:"Chesed" },
-        { q:"Following a difficult fast", a:"Gevurah" },
+        { q:"Finishing what you started even when it's hard", a:"Gevurah" },
         { q:"Forgiving a friend's mistake", a:"Tiferet" }
       ] }
   },
@@ -462,8 +482,10 @@ const WEEK_CONTENT = {
     quote:"נֵצַח יִשְׂרָאֵל לֹא יְשַׁקֵּר", translation:"The Endurance of Israel does not fail. (1 Samuel 15:29)",
     learning:"Netzach means 'Endurance' or 'Victory.' It is the grit to keep going when things get hard. Think of the marathon runner — not the fastest sprinter, but the one who finishes. That is the spirit of Netzach in our spiritual lives.",
     discussion:"What is something you worked on for a long time without giving up? What kept you going?",
+    teacherNote:"📋 Conservative Context — The Omer Mourning Period: During the Omer, Conservative Judaism observes a semi-mourning period (no live music, no weddings). This teaches that joy must be earned through growth and spiritual work. The mourning honors Rabbi Akiva's 24,000 students. Share with students: this is not sadness for its own sake, but a reminder that celebration has more meaning when we've worked toward it.",
     game:{ title:"Endurance Relay", type:"endurance",
       instructions:"Generate pairs first. One partner holds a weight while the other answers. Show Hebrew to check.",
+      teacherNote:"📋 Teacher Note: English names of the 5 Books of the Torah are acceptable (Genesis, Exodus, Leviticus, Numbers, Deuteronomy).",
       tasks:[
         { q:"Name the 2 Shabbat commandments", a:"זָכוֹר וְשָׁמוֹר — Remember and Keep (Zachor v'Shamor)" },
         { q:"Name the 3 Patriarchs", a:"אַבְרָהָם, יִצְחָק, יַעֲקֹב" },
@@ -505,7 +527,10 @@ const WEEK_CONTENT = {
         { q:"What number does 'Lag' equal in Gematria?", a:"33",
           options:["18","33","49"],
           info:"Lamed (ל) = 30. Gimmel (ג) = 3. Together, Lag = 33 — the 33rd day of the Omer counting.",
-          gematria33:"The number 33 resonates through creation itself. In Genesis (1:1–2:4), the name of God — Elohim — appears exactly 33 times, marking 33 as the numerical signature of Divine creative energy. In mystical teachings, the human spine has 33 vertebrae representing 33 elevations of consciousness. And Lag BaOmer — this very day — bridges the miracles of the Red Sea and the revelation at Sinai." }
+          gematria33:"The number 33 resonates through creation itself. In Genesis (1:1–2:4), the name of God — Elohim — appears exactly 33 times, marking 33 as the numerical signature of Divine creative energy. In mystical teachings, the human spine has 33 vertebrae representing 33 elevations of consciousness. And Lag BaOmer — this very day — bridges the miracles of the Red Sea and the revelation at Sinai." },
+        { q:"Why do we observe semi-mourning during the Omer before Lag BaOmer?", a:"Students of Rabbi Akiva died",
+          options:["The Temple was destroyed","Students of Rabbi Akiva died","A plague struck Jerusalem"],
+          info:"The Talmud (Yevamot 62b) records that Rabbi Akiva had 24,000 students who perished during the Omer — tradition says from a spiritual plague caused by failing to honor each other. The mourning lifted on Lag BaOmer. Conservative Judaism observes this semi-mourning (no weddings or live music), with communities varying on which 33 days they observe." }
       ] }
   },
   5: {
@@ -527,7 +552,7 @@ const WEEK_CONTENT = {
       instructions:"Generate pairs first. The Leader (facing the board) guides their partner using only words. No touching!",
       tasks:[
         { q:"Raise your right hand slowly. Now raise your left. Touch your nose with your right hand, then clap once.", switchAfter:true },
-        { q:"Tap both knees twice. Fold your hands, lift them above your head, and bring them back down slowly." }
+        { q:"Step 1: Tap both knees twice. Step 2: Fold your hands and lift them above your head. Step 3: Bring them back down slowly to your lap." }
       ] }
   },
   7: {
@@ -1054,6 +1079,11 @@ function SessionOpener({ weekTitle, weekId }) {
                   </div>
                 ))}
               </div>
+              <div style={{background:'#eff6ff',border:'2px solid #bfdbfe',borderRadius:'1rem',padding:'1rem 1.25rem',marginTop:'0.25rem'}}>
+                <p style={{fontWeight:900,color:'#1e3a8a',fontSize:'0.85rem',margin:'0 0 0.3rem',textTransform:'uppercase',letterSpacing:'0.06em'}}>🕍 Conservative Practice Note</p>
+                <p style={{fontSize:'0.92rem',color:'#1e3a8a',fontWeight:700,margin:0,lineHeight:1.6}}>We count the Omer on <strong>Saturday nights after Havdalah</strong> (when Shabbat ends and the new day begins in Jewish time), and then again each weekday evening after nightfall. If students ask why Saturday night — it's because the Jewish day begins at nightfall, so after Havdalah is the first moment of the new day.</p>
+              </div>
+              </div>
               <a href="https://www.myjewishlearning.com/article/613-commandments/" target="_blank" rel="noopener noreferrer"
                 style={{display:'flex',alignItems:'center',gap:'0.4rem',color:'#92400e',fontWeight:900,fontSize:'0.85rem',textDecoration:'none'}}>
                 <Icons.ExternalLink size={14} color="#92400e"/> The 613 Mitzvot explained at MyJewishLearning
@@ -1196,11 +1226,14 @@ function MoreResourcesPanel({ weekId, accent }) {
 function SirenPlayer() {
   const [phase, setPhase] = React.useState('idle'); // idle | playing | done
   const [elapsed, setElapsed] = React.useState(0);
+  const [sirenRound, setSirenRound] = React.useState(1); // 1 = eve (1 min), 2 = morning (2 min)
   const audioCtxRef = React.useRef(null);
   const gainRef = React.useRef(null);
   const oscRef = React.useRef(null);
   const intervalRef = React.useRef(null);
-  const DURATION = 120;
+
+  // Round 1 = 60s (Yom Hazikaron eve), Round 2 = 120s (Yom Hazikaron morning)
+  const DURATION = sirenRound === 1 ? 60 : 120;
 
   const startSiren = () => {
     try {
@@ -1210,24 +1243,37 @@ function SirenPlayer() {
       const gain = ctx.createGain();
       gain.connect(ctx.destination);
       gain.gain.setValueAtTime(0.001, ctx.currentTime);
-      gain.gain.linearRampToValueAtTime(0.4, ctx.currentTime + 0.5);
+      gain.gain.linearRampToValueAtTime(0.45, ctx.currentTime + 0.6);
       gainRef.current = gain;
-      const osc = ctx.createOscillator();
-      osc.connect(gain);
-      osc.type = 'sawtooth';
+
+      // Multi-oscillator for richer siren sound
+      const osc1 = ctx.createOscillator();
+      const osc2 = ctx.createOscillator();
+      const gainOsc2 = ctx.createGain();
+      gainOsc2.gain.setValueAtTime(0.3, ctx.currentTime);
+      osc1.connect(gain);
+      osc2.connect(gainOsc2);
+      gainOsc2.connect(gain);
+      osc1.type = 'sawtooth';
+      osc2.type = 'triangle';
       const now = ctx.currentTime;
-      // Siren sweep: 300hz → 600hz over 3s, then 600→300 over 3s, repeat
-      const sweepDuration = 3.0;
-      for (let i = 0; i < 40; i++) {
+      const sweepDuration = 2.8;
+      const numSweeps = Math.ceil((DURATION + 2) / sweepDuration) + 2;
+      for (let i = 0; i < numSweeps; i++) {
         const t = now + i * sweepDuration;
-        osc.frequency.setValueAtTime(300, t);
-        osc.frequency.linearRampToValueAtTime(600, t + sweepDuration/2);
-        osc.frequency.linearRampToValueAtTime(300, t + sweepDuration);
+        osc1.frequency.setValueAtTime(310, t);
+        osc1.frequency.linearRampToValueAtTime(620, t + sweepDuration * 0.5);
+        osc1.frequency.linearRampToValueAtTime(310, t + sweepDuration);
+        osc2.frequency.setValueAtTime(315, t);
+        osc2.frequency.linearRampToValueAtTime(630, t + sweepDuration * 0.5);
+        osc2.frequency.linearRampToValueAtTime(315, t + sweepDuration);
       }
-      osc.start(now);
-      osc.stop(now + DURATION + 1);
-      oscRef.current = osc;
-      osc.onended = () => {
+      osc1.start(now);
+      osc2.start(now);
+      osc1.stop(now + DURATION + 1.5);
+      osc2.stop(now + DURATION + 1.5);
+      oscRef.current = osc1;
+      osc1.onended = () => {
         setPhase('done');
         clearInterval(intervalRef.current);
       };
@@ -1237,7 +1283,7 @@ function SirenPlayer() {
         setElapsed(e => {
           if (e >= DURATION - 1) {
             clearInterval(intervalRef.current);
-            gain.gain.linearRampToValueAtTime(0.001, ctx.currentTime + 1);
+            try { gain.gain.linearRampToValueAtTime(0.001, ctx.currentTime + 1.2); } catch(ex){}
             return DURATION;
           }
           return e + 1;
@@ -1251,8 +1297,8 @@ function SirenPlayer() {
   const stopSiren = () => {
     clearInterval(intervalRef.current);
     if (oscRef.current) try { oscRef.current.stop(); } catch(e) {}
-    if (gainRef.current) try { gainRef.current.gain.linearRampToValueAtTime(0.001, audioCtxRef.current.currentTime + 0.3); } catch(e){}
-    if (audioCtxRef.current) setTimeout(()=>{ try { audioCtxRef.current.close(); } catch(e){} }, 500);
+    if (gainRef.current && audioCtxRef.current) try { gainRef.current.gain.linearRampToValueAtTime(0.001, audioCtxRef.current.currentTime + 0.4); } catch(e){}
+    if (audioCtxRef.current) setTimeout(()=>{ try { audioCtxRef.current.close(); } catch(e){} }, 600);
     setPhase('idle'); setElapsed(0);
   };
 
@@ -1264,36 +1310,63 @@ function SirenPlayer() {
       <div style={{display:'flex',alignItems:'center',gap:'0.75rem',marginBottom:'1rem'}}>
         <Icons.Sound size={26} color="white"/>
         <div>
-          <p style={{margin:0,fontWeight:900,fontSize:'1.1rem'}}>Two-Minute Siren</p>
+          <p style={{margin:0,fontWeight:900,fontSize:'1.1rem'}}>The Yom Hazikaron Siren</p>
           <p style={{margin:0,fontSize:'0.8rem',opacity:0.75}}>The memorial siren that stops all of Israel</p>
         </div>
       </div>
+
+      {/* Educational context box */}
+      <div style={{background:'rgba(255,255,255,0.12)',borderRadius:'1rem',padding:'1rem 1.25rem',marginBottom:'1rem',borderLeft:'4px solid rgba(255,255,255,0.5)'}}>
+        <p style={{margin:'0 0 0.5rem',fontWeight:900,fontSize:'0.75rem',textTransform:'uppercase',letterSpacing:'0.08em',opacity:0.8}}>📋 Teacher Context</p>
+        <p style={{margin:0,fontSize:'0.9rem',lineHeight:1.65,opacity:0.92}}>
+          In Israel, the siren sounds <strong>twice</strong> each Yom Hazikaron:
+        </p>
+        <ul style={{margin:'0.4rem 0 0',paddingLeft:'1.25rem',fontSize:'0.9rem',lineHeight:1.7,opacity:0.92}}>
+          <li><strong>Yom Hazikaron Eve (8:00 PM):</strong> One siren, lasting <strong>1 minute</strong> — marking the start of the memorial day.</li>
+          <li><strong>Yom Hazikaron Morning (11:00 AM):</strong> A second siren, lasting <strong>2 minutes</strong> — the main national moment of silence. All traffic halts; people stand wherever they are.</li>
+        </ul>
+        <p style={{margin:'0.5rem 0 0',fontSize:'0.85rem',fontStyle:'italic',opacity:0.8}}>The tradition began in 1963, modeled on European Armistice Day practices, but became distinctly Israeli — the entire country pausing as one body in collective grief.</p>
+      </div>
+
+      {/* Round selector */}
+      {phase === 'idle' && (
+        <div style={{display:'flex',gap:'0.5rem',marginBottom:'0.75rem'}}>
+          {[{r:1,label:'Evening Siren (1 min)'},{r:2,label:'Morning Siren (2 min)'}].map(({r,label})=>(
+            <button key={r} onClick={()=>setSirenRound(r)}
+              style={{flex:1,padding:'0.6rem',border:'2px solid',borderColor:sirenRound===r?'white':'rgba(255,255,255,0.35)',borderRadius:'0.75rem',background:sirenRound===r?'white':'transparent',color:sirenRound===r?'#0038b8':'white',fontWeight:900,cursor:'pointer',fontSize:'0.8rem',transition:'all 0.15s'}}>
+              {label}
+            </button>
+          ))}
+        </div>
+      )}
+
       {phase === 'idle' && (
         <div style={{display:'flex',flexDirection:'column',gap:'0.75rem'}}>
-          <p style={{margin:0,fontSize:'0.9rem',lineHeight:1.6,opacity:0.85}}>At 11:00 AM on Yom Hazikaron, a two-minute siren sounds across Israel. All traffic stops. People stand in silence wherever they are. Click below to experience the siren with your class.</p>
           <button onClick={startSiren}
             style={{background:'white',color:'#0038b8',border:'none',borderRadius:'1rem',padding:'0.85rem 1.5rem',fontWeight:900,fontSize:'1.1rem',cursor:'pointer',display:'flex',alignItems:'center',gap:'0.6rem',justifyContent:'center'}}>
-            <Icons.Sound size={20} color="#0038b8"/> Sound the Siren (2 minutes)
+            <Icons.Sound size={20} color="#0038b8"/> Sound the Siren ({sirenRound===1?'1 minute':'2 minutes'})
           </button>
         </div>
       )}
       {phase === 'playing' && (
         <div style={{textAlign:'center',display:'flex',flexDirection:'column',gap:'1rem',alignItems:'center'}}>
-          <div style={{width:'6rem',height:'6rem',borderRadius:'50%',background:'rgba(255,255,255,0.15)',border:'4px solid white',display:'flex',alignItems:'center',justifyContent:'center',animation:'pulse 1s infinite'}}>
-            <span style={{fontSize:'2rem',fontWeight:900}}>{fmtT(remaining)}</span>
+          <div style={{width:'7rem',height:'7rem',borderRadius:'50%',background:'rgba(255,255,255,0.15)',border:'4px solid white',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',animation:'pulse 1s infinite'}}>
+            <span style={{fontSize:'2.2rem',fontWeight:900,lineHeight:1}}>{fmtT(remaining)}</span>
+            <span style={{fontSize:'0.65rem',opacity:0.7,fontWeight:700,textTransform:'uppercase',letterSpacing:'0.05em'}}>remaining</span>
           </div>
-          <p style={{margin:0,fontWeight:900,fontSize:'1.1rem',opacity:0.9}}>Stand in silence. Remember.</p>
+          <p style={{margin:0,fontWeight:900,fontSize:'1.2rem',opacity:0.95}}>עֲמֹד — Stand in silence. Remember.</p>
           <button onClick={stopSiren}
             style={{background:'rgba(255,255,255,0.2)',color:'white',border:'2px solid rgba(255,255,255,0.5)',borderRadius:'0.75rem',padding:'0.5rem 1.25rem',fontWeight:900,cursor:'pointer',fontSize:'0.9rem'}}>
-            End Siren
+            End Siren Early
           </button>
         </div>
       )}
       {phase === 'done' && (
         <div style={{textAlign:'center',display:'flex',flexDirection:'column',gap:'0.75rem'}}>
           <p style={{margin:0,fontWeight:900,fontSize:'1.1rem'}}>The siren has ended.</p>
-          <p style={{margin:0,fontSize:'0.9rem',opacity:0.85,fontStyle:'italic'}}>"We will not forget. We will not remain silent."</p>
-          <button onClick={()=>setPhase('idle')} style={{background:'rgba(255,255,255,0.2)',color:'white',border:'2px solid rgba(255,255,255,0.4)',borderRadius:'0.75rem',padding:'0.5rem 1rem',fontWeight:900,cursor:'pointer',fontSize:'0.9rem'}}>Sound Again</button>
+          <p style={{margin:0,fontSize:'0.9rem',opacity:0.85,fontStyle:'italic'}}>"We will not forget. We will not remain silent." — לֹא נִשְׁכַּח</p>
+          {sirenRound===1 && <p style={{margin:0,fontSize:'0.85rem',opacity:0.8}}>In Israel, this would be followed tomorrow morning by a 2-minute siren at 11:00 AM.</p>}
+          <button onClick={()=>{setPhase('idle');setElapsed(0);}} style={{background:'rgba(255,255,255,0.2)',color:'white',border:'2px solid rgba(255,255,255,0.4)',borderRadius:'0.75rem',padding:'0.5rem 1rem',fontWeight:900,cursor:'pointer',fontSize:'0.9rem'}}>Sound Again</button>
         </div>
       )}
     </div>
@@ -1301,7 +1374,7 @@ function SirenPlayer() {
 }
 
 /* ── SETTINGS PANEL ── */
-function SettingsPanel({ students, setStudents, timerMinutes, setTimerMinutes, onClose }) {
+function SettingsPanel({ students, setStudents, timerMinutes, setTimerMinutes, gradeBand, setGradeBand, onClose, onWeekOverview }) {
   const [newName, setNewName] = useState('');
   const [editIdx, setEditIdx] = useState(null);
   const [editVal, setEditVal] = useState('');
@@ -1333,6 +1406,26 @@ function SettingsPanel({ students, setStudents, timerMinutes, setTimerMinutes, o
         </div>
 
         <div style={{overflowY:'auto',flex:1,padding:'2rem',display:'flex',flexDirection:'column',gap:'2rem'}}>
+
+          {/* GRADE BAND TOGGLE */}
+          <div>
+            <div style={{display:'flex',alignItems:'center',gap:'0.5rem',marginBottom:'1rem'}}>
+              <Icons.Users size={22} color="#1A365D"/>
+              <span className="font-body" style={{fontWeight:900,fontSize:'1.1rem',color:'#1A365D',textTransform:'uppercase',letterSpacing:'0.05em'}}>Grade Band</span>
+            </div>
+            <div style={{display:'flex',gap:'0.5rem',background:'#f1f5f9',padding:'0.4rem',borderRadius:'1rem'}}>
+              {[{id:'younger',label:'Grades 3–5 (Younger)'},{id:'both',label:'All Grades'},{id:'older',label:'Grades 6–7 (Older)'}].map(b=>(
+                <button key={b.id} onClick={()=>setGradeBand(b.id)} className="font-body"
+                  style={{flex:1,padding:'0.65rem 0.5rem',border:'none',borderRadius:'0.75rem',fontWeight:900,cursor:'pointer',fontSize:'0.85rem',transition:'all 0.15s',
+                    background:gradeBand===b.id?'#1A365D':'transparent',
+                    color:gradeBand===b.id?'white':'#64748b'}}>
+                  {b.label}
+                </button>
+              ))}
+            </div>
+            <p className="font-body" style={{fontSize:'0.82rem',color:'#94a3b8',marginTop:'0.5rem'}}>Controls which discussion prompts and challenge text are shown during play.</p>
+          </div>
+
           <div>
             <div style={{display:'flex',alignItems:'center',gap:'0.5rem',marginBottom:'1rem'}}>
               <Icons.Clock size={22} color="#1A365D"/>
@@ -1401,9 +1494,13 @@ function SettingsPanel({ students, setStudents, timerMinutes, setTimerMinutes, o
           </div>
         </div>
 
-        <div style={{padding:'1.5rem',borderTop:'4px solid #f1f5f9'}}>
+        <div style={{padding:'1.5rem',borderTop:'4px solid #f1f5f9',display:'flex',gap:'0.75rem'}}>
+          <button onClick={()=>{onWeekOverview();onClose();}} className="font-display"
+            style={{flex:'0 0 auto',background:'#f1f5f9',color:'#1A365D',padding:'1.1rem 1.25rem',borderRadius:'1.5rem',fontSize:'1.1rem',letterSpacing:'0.04em',border:'3px solid #1A365D',cursor:'pointer',display:'flex',alignItems:'center',gap:'0.4rem'}}>
+            <Icons.Book size={20} color="#1A365D"/> Week Overview
+          </button>
           <button onClick={onClose} className="font-display"
-            style={{width:'100%',background:'#1A365D',color:'white',padding:'1.1rem',borderRadius:'1.5rem',fontSize:'1.5rem',letterSpacing:'0.05em',border:'none',cursor:'pointer'}}>
+            style={{flex:1,background:'#1A365D',color:'white',padding:'1.1rem',borderRadius:'1.5rem',fontSize:'1.5rem',letterSpacing:'0.05em',border:'none',cursor:'pointer'}}>
             DONE
           </button>
         </div>
@@ -1544,15 +1641,58 @@ function GratitudeCaller({ students, currentLetter }) {
   );
 }
 
+/* ── CONFETTI BURST ── */
+function ConfettiBurst() {
+  const COLORS = ['#D4AF37','#1A365D','#16a34a','#f59e0b','#e11d48','#7c3aed','#0038b8','#06b6d4'];
+  const SHAPES = ['rect','circle','triangle'];
+  const pieces = React.useMemo(() => Array.from({length:60},(_,i)=>({
+    id:i,
+    x: 30 + Math.random()*40,
+    delay: Math.random()*0.5,
+    duration: 1.8 + Math.random()*1.4,
+    color: COLORS[i % COLORS.length],
+    shape: SHAPES[i % SHAPES.length],
+    size: 8 + Math.random()*12,
+    rotate: Math.random()*360,
+  })),[]);
+  return (
+    <div style={{position:'fixed',inset:0,pointerEvents:'none',zIndex:500,overflow:'hidden'}}>
+      {pieces.map(p=>(
+        <div key={p.id} style={{
+          position:'absolute',
+          left:`${p.x}%`,
+          top:'-20px',
+          width: p.shape==='rect' ? `${p.size*1.5}px` : `${p.size}px`,
+          height: `${p.size}px`,
+          background: p.shape==='triangle'?'transparent':p.color,
+          borderRadius: p.shape==='circle'?'50%':'3px',
+          borderLeft: p.shape==='triangle'?`${p.size/2}px solid transparent`:undefined,
+          borderRight: p.shape==='triangle'?`${p.size/2}px solid transparent`:undefined,
+          borderBottom: p.shape==='triangle'?`${p.size}px solid ${p.color}`:undefined,
+          animation:`confettiFall ${p.duration}s ${p.delay}s cubic-bezier(0.25,0.46,0.45,0.94) forwards`,
+          transform:`rotate(${p.rotate}deg)`,
+        }}/>
+      ))}
+    </div>
+  );
+}
+
 /* ── CORRECT MODAL with 33 tab ── */
 function CorrectModal({ info, gematria33, onClose }) {
   const [tab, setTab] = useState('fact');
   return (
+    <>
+    <ConfettiBurst/>
     <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.85)',zIndex:200,display:'flex',alignItems:'center',justifyContent:'center',padding:'2rem'}}>
-      <div style={{background:'white',border:'8px solid #2D2D2D',borderRadius:'3rem',maxWidth:'680px',width:'100%',boxShadow:'0 25px 50px rgba(0,0,0,0.4)',overflow:'hidden'}}>
-        <div style={{padding:'2.5rem',textAlign:'center',borderBottom:'4px solid #f1f5f9'}}>
-          <div style={{display:'flex',justifyContent:'center',marginBottom:'1rem'}}><Icons.Medal size={70} color="#D4AF37"/></div>
-          <h2 className="font-display" style={{fontSize:'3.5rem',color:'#1A365D',letterSpacing:'0.05em',margin:0}}>CORRECT!</h2>
+      <div style={{background:'white',border:'8px solid #2D2D2D',borderRadius:'3rem',maxWidth:'680px',width:'100%',boxShadow:'0 25px 50px rgba(0,0,0,0.4)',overflow:'hidden',animation:'correctPop 0.35s ease-out'}}>
+        <div style={{padding:'2.5rem',textAlign:'center',borderBottom:'4px solid #f1f5f9',background:'linear-gradient(135deg,#eff6ff 0%,#fefce8 100%)'}}>
+          <div style={{display:'flex',justifyContent:'center',gap:'0.5rem',marginBottom:'1rem'}}>
+            <Icons.Star size={40} color="#D4AF37"/>
+            <Icons.Medal size={70} color="#D4AF37"/>
+            <Icons.Star size={40} color="#D4AF37"/>
+          </div>
+          <h2 className="font-display" style={{fontSize:'4rem',color:'#1A365D',letterSpacing:'0.05em',margin:'0 0 0.25rem',background:'linear-gradient(90deg,#1A365D,#0038b8,#1A365D)',backgroundSize:'200% auto',WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent',animation:'shimmer 2s linear infinite'}}>CORRECT!</h2>
+          <p style={{margin:0,color:'#16a34a',fontWeight:900,fontSize:'1.1rem'}}>+25 points earned!</p>
         </div>
 
         {gematria33 && (
@@ -1588,6 +1728,77 @@ function CorrectModal({ info, gematria33, onClose }) {
         </div>
       </div>
     </div>
+    </>
+  );
+}
+
+/* ── WEEK OVERVIEW MODAL ── */
+/* ── WEEK OVERVIEW MODAL ── */
+function WeekOverviewModal({ onClose, onJump }) {
+  const WEEKS = [
+    { id:1, label:'W1', title:'Week 1: Chesed', color:'#D4AF37', middah:'Loving-Kindness', game:'Chesed Secret Charades', key:'Acts of kindness — giving from the heart.' },
+    { id:2, label:'W2', title:'Week 2: Gevurah', color:'#1A365D', middah:'Discipline & Boundaries', game:'The Gevurah Shield', key:'Choosing boundaries — saying no with strength.' },
+    { id:3, label:'W3', title:'Week 3: Tiferet', color:'#15803d', middah:'Compassion & Balance', game:'Harmony Match-Up', key:'Balancing truth and kindness — heart of the Sefirot.' },
+    { id:4, label:'W4', title:'Week 4: Netzach', color:'#7c3aed', middah:'Perseverance', game:'Endurance Relay', key:'Grit — keeping going when it gets hard.' },
+    { id:28, label:'D28', title:'Day 28: Yom Hazikaron', color:'#0038b8', middah:'Heritage Observance', game:'Heritage Module', key:'Israel Memorial Day — the Silver Platter & the Siren.' },
+    { id:29, label:'D29', title:'Day 29: Yom Haatzmaut', color:'#0038b8', middah:'Heritage Observance', game:'Heritage Module', key:'Israel Independence Day — Megillat HaAtzmaut.' },
+    { id:33, label:'D33', title:'Lag BaOmer', color:'#c2410c', middah:'Inner Light', game:'Bonfire Trivia', key:'Rashbi & the Zohar — hidden Torah, inner transformation.' },
+    { id:5, label:'W5', title:'Week 5: Hod', color:'#0891b2', middah:'Gratitude & Humility', game:'A-Z Gratitude Grid', key:'Noticing the gifts we have — Modeh Ani.' },
+    { id:6, label:'W6', title:'Week 6: Yesod', color:'#065f46', middah:'Integrity & Connection', game:'Trust Connection', key:'Being someone others can rely on — the foundation.' },
+    { id:7, label:'W7', title:'Week 7: Malchut', color:'#1A365D', middah:'Leadership & Presence', game:'The Sinai Summit Quiz', key:'Showing up fully — the harvest of 49 days of growth.' },
+  ];
+  return (
+    <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.88)',zIndex:500,display:'flex',alignItems:'center',justifyContent:'center',padding:'1.5rem'}}>
+      <div style={{background:'white',border:'8px solid #1A365D',borderRadius:'2.5rem',maxWidth:'820px',width:'100%',maxHeight:'92vh',display:'flex',flexDirection:'column',boxShadow:'0 30px 80px rgba(0,0,0,0.5)',overflow:'hidden'}}>
+        <div style={{background:'#1A365D',padding:'1.5rem 2rem',display:'flex',alignItems:'center',justifyContent:'space-between',flexShrink:0}}>
+          <div style={{display:'flex',alignItems:'center',gap:'0.75rem'}}>
+            <Icons.Wheat size={36} color="#D4AF37"/>
+            <div>
+              <h2 className="font-display" style={{margin:0,fontSize:'2rem',color:'white',letterSpacing:'0.05em'}}>WEEK OVERVIEW</h2>
+              <p style={{margin:0,fontSize:'0.8rem',color:'rgba(255,255,255,0.65)',fontWeight:700}}>The Harvest Path — All 10 Modules at a Glance</p>
+            </div>
+          </div>
+          <button onClick={onClose} style={{background:'rgba(255,255,255,0.15)',border:'none',borderRadius:'0.75rem',padding:'0.6rem',cursor:'pointer'}}>
+            <Icons.X size={24} color="white"/>
+          </button>
+        </div>
+        <div style={{overflowY:'auto',flex:1,padding:'1.5rem',display:'flex',flexDirection:'column',gap:'0.75rem'}}>
+          {WEEKS.map((w,i) => (
+            <div key={w.id} style={{display:'flex',alignItems:'stretch',gap:'0',background:'white',border:`3px solid ${w.color}`,borderRadius:'1.25rem',overflow:'hidden'}}>
+              <div style={{background:w.color,color:'white',padding:'1rem 1.25rem',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',flexShrink:0,minWidth:'4.5rem'}}>
+                <span className="font-display" style={{fontSize:'1.8rem',letterSpacing:'0.05em',lineHeight:1}}>{w.label}</span>
+                <span style={{fontSize:'0.65rem',fontWeight:900,opacity:0.7,textTransform:'uppercase',letterSpacing:'0.06em',marginTop:'0.2rem'}}>{i+1 <= 4 || i >= 7 ? `Wk ${[1,2,3,4,5,6,7][i > 6 ? i-3 : i]}` : 'Day'}</span>
+              </div>
+              <div style={{flex:1,padding:'0.85rem 1.1rem'}}>
+                <div style={{display:'flex',alignItems:'flex-start',justifyContent:'space-between',gap:'1rem',flexWrap:'wrap'}}>
+                  <div>
+                    <p style={{fontWeight:900,color:'#1A365D',fontSize:'1rem',margin:'0 0 0.2rem'}}>{w.title}</p>
+                    <p style={{fontSize:'0.85rem',fontWeight:700,color:w.color,margin:'0 0 0.35rem'}}>{w.middah}</p>
+                    <p style={{fontSize:'0.82rem',color:'#475569',margin:0,lineHeight:1.5}}>{w.key}</p>
+                  </div>
+                  <div style={{background:'#f8fafc',border:`2px solid ${w.color}20`,borderRadius:'0.6rem',padding:'0.4rem 0.8rem',flexShrink:0,textAlign:'center'}}>
+                    <p style={{fontSize:'0.65rem',fontWeight:900,color:'#94a3b8',textTransform:'uppercase',letterSpacing:'0.06em',margin:'0 0 0.1rem'}}>Game</p>
+                    <p style={{fontSize:'0.8rem',fontWeight:900,color:w.color,margin:0}}>{w.game}</p>
+                  </div>
+                  {onJump && (
+                    <button onClick={()=>{onJump(w.id);onClose();}}
+                      style={{background:w.color,color:'white',border:'none',borderRadius:'0.6rem',padding:'0.4rem 0.9rem',fontWeight:900,cursor:'pointer',fontSize:'0.8rem',flexShrink:0,display:'flex',alignItems:'center',gap:'0.3rem'}}>
+                      <Icons.ChevronRight size={14} color="white"/> Go
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div style={{padding:'1.25rem 1.5rem',borderTop:'3px solid #f1f5f9',flexShrink:0}}>
+          <button onClick={onClose} className="font-display"
+            style={{width:'100%',background:'#1A365D',color:'white',padding:'1rem',borderRadius:'1.5rem',fontSize:'1.4rem',letterSpacing:'0.05em',border:'none',cursor:'pointer'}}>
+            CLOSE OVERVIEW
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -1614,8 +1825,12 @@ function App() {
   const [gematriaOpen, setGematriaOpen] = useState(false);
   const [wrongFlash, setWrongFlash] = useState(false);
   const [gevurahWrong, setGevurahWrong] = useState(new Set());
+  const [quizWrongIdx, setQuizWrongIdx] = useState(null);
   const [heritageModal, setHeritageModal] = useState(null); // day number or null
   const [heritageCompleted, setHeritageCompletedState] = useState(() => getHeritageCompleted());
+  const [gradeBand, setGradeBand] = useState('both'); // 'younger' | 'older' | 'both'
+  const [nextPhaseConfirm, setNextPhaseConfirm] = useState(false);
+  const [showWeekOverview, setShowWeekOverview] = useState(false);
 
   const setTimerMinutes = (m) => { setTimerMinutesState(m); setTimeLeft(m*60); };
 
@@ -1629,7 +1844,7 @@ function App() {
   const resetGameMode = () => {
     setActiveMode('learning'); setGameStep(0); setRevealedTasks({});
     setMatchSelected(null); setMatchedPairs([]); setMatchFeedback(null);
-    setGematriaOpen(false); setGratitudeLetter(0); setGevurahWrong(new Set());
+    setGematriaOpen(false); setGratitudeLetter(0); setGevurahWrong(new Set()); setQuizWrongIdx(null);
   };
 
   const jumpToWeek = (id) => { setCurrentWeek(id); resetGameMode(); };
@@ -1727,7 +1942,8 @@ function App() {
   /* LOBBY */
   if (gameState==='lobby') return (
     <div className="font-body" style={{minHeight:'100vh',background:'#FDFBF7',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',padding:'2rem',gap:'2rem'}}>
-      {showSettings && <SettingsPanel students={students} setStudents={setStudents} timerMinutes={timerMinutes} setTimerMinutes={setTimerMinutes} onClose={()=>setShowSettings(false)}/>}
+      {showSettings && <SettingsPanel students={students} setStudents={setStudents} timerMinutes={timerMinutes} setTimerMinutes={setTimerMinutes} gradeBand={gradeBand} setGradeBand={setGradeBand} onWeekOverview={()=>setShowWeekOverview(true)} onClose={()=>setShowSettings(false)}/>}
+      {showWeekOverview && <WeekOverviewModal onClose={()=>setShowWeekOverview(false)} onJump={(id)=>{setGameState('playing');setCurrentWeek(id);}}/>}
       <div style={{maxWidth:'900px',width:'100%',textAlign:'center',display:'flex',flexDirection:'column',gap:'1.5rem'}}>
         <div style={{display:'flex',justifyContent:'flex-end'}}>
           <button onClick={()=>setShowSettings(true)}
@@ -1740,13 +1956,13 @@ function App() {
         <p style={{fontSize:'1.4rem',fontWeight:'bold',color:'#64748b',margin:0}}>A Collaborative Journey through Sefirat HaOmer</p>
         <div style={{aspectRatio:'16/9',width:'100%',borderRadius:'2.5rem',overflow:'hidden',border:'8px solid #1A365D',background:'#0f172a',boxShadow:'0 25px 50px rgba(0,0,0,0.3)',position:'relative'}}>
           <iframe width="100%" height="100%"
-            src="https://www.youtube.com/embed/xHm3PD6XFLE?rel=0&modestbranding=1"
+            src="https://www.youtube.com/embed/glKn66S26n0?rel=0&modestbranding=1"
             title="Counting the Omer — What Is Sefirat HaOmer?" frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen
             style={{display:'block'}}/>
         </div>
         <div style={{display:'flex',gap:'0.75rem',justifyContent:'center',flexWrap:'wrap'}}>
-          <a href="https://www.youtube.com/watch?v=xHm3PD6XFLE" target="_blank" rel="noopener noreferrer"
+          <a href="https://youtu.be/glKn66S26n0?si=EHFFI8YtbWoZqUQN" target="_blank" rel="noopener noreferrer"
             style={{display:'flex',alignItems:'center',gap:'0.4rem',color:'#64748b',fontWeight:700,fontSize:'0.85rem',textDecoration:'none',background:'white',border:'2px solid #e2e8f0',padding:'0.4rem 0.9rem',borderRadius:'0.75rem'}}>
             <Icons.ExternalLink size={14} color="#64748b"/> If video doesn't load, watch on YouTube
           </a>
@@ -1770,9 +1986,30 @@ function App() {
   return (
     <div className="font-body" style={{minHeight:'100vh',background:wrongFlash?'#fef2f2':'#FDFBF7',color:'#2D2D2D',padding:'1.25rem',display:'flex',flexDirection:'column',gap:'1.25rem',transition:'background 0.2s'}}>
 
-      {showSettings && <SettingsPanel students={students} setStudents={setStudents} timerMinutes={timerMinutes} setTimerMinutes={setTimerMinutes} onClose={()=>setShowSettings(false)}/>}
+      {showSettings && <SettingsPanel students={students} setStudents={setStudents} timerMinutes={timerMinutes} setTimerMinutes={setTimerMinutes} gradeBand={gradeBand} setGradeBand={setGradeBand} onWeekOverview={()=>setShowWeekOverview(true)} onClose={()=>setShowSettings(false)}/>}
       {correctModal && <CorrectModal info={correctModal.info} gematria33={correctModal.gematria33} onClose={closeCorrect}/>}
       {heritageModal && <HeritageModal day={heritageModal} onClose={()=>setHeritageModal(null)} onComplete={handleHeritageComplete} alreadyCompleted={!!heritageCompleted[heritageModal]}/>}
+      {showWeekOverview && <WeekOverviewModal onClose={()=>setShowWeekOverview(false)} onJump={jumpToWeek}/>}
+
+      {nextPhaseConfirm && (
+        <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.85)',zIndex:250,display:'flex',alignItems:'center',justifyContent:'center',padding:'2rem'}}>
+          <div style={{background:'white',border:'8px solid #D4AF37',borderRadius:'2.5rem',maxWidth:'460px',width:'100%',padding:'2.5rem',textAlign:'center',boxShadow:'0 25px 50px rgba(0,0,0,0.4)'}}>
+            <div style={{display:'flex',justifyContent:'center',marginBottom:'1.25rem'}}><Icons.ChevronRight size={60} color="#D4AF37"/></div>
+            <h2 className="font-display" style={{fontSize:'2.5rem',color:'#1A365D',letterSpacing:'0.05em',margin:'0 0 0.75rem'}}>MOVE TO NEXT PHASE?</h2>
+            <p style={{fontSize:'1.1rem',fontWeight:700,color:'#475569',marginBottom:'2rem',lineHeight:1.5}}>This will advance to the next week. Make sure the class is ready before continuing.</p>
+            <div style={{display:'flex',gap:'1rem'}}>
+              <button onClick={()=>setNextPhaseConfirm(false)} className="font-display"
+                style={{flex:1,background:'#f1f5f9',color:'#475569',padding:'1rem',borderRadius:'1.25rem',fontSize:'1.2rem',letterSpacing:'0.04em',border:'4px solid #e2e8f0',cursor:'pointer'}}>
+                CANCEL
+              </button>
+              <button onClick={()=>{setNextPhaseConfirm(false);handleNextWeek();}} className="font-display"
+                style={{flex:1,background:'#D4AF37',color:'white',padding:'1rem',borderRadius:'1.25rem',fontSize:'1.2rem',letterSpacing:'0.04em',border:'none',cursor:'pointer'}}>
+                ADVANCE!
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {switchModal && (
         <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.85)',zIndex:200,display:'flex',alignItems:'center',justifyContent:'center',padding:'2rem'}}>
@@ -1835,7 +2072,7 @@ function App() {
 
           <StudentPicker students={students}/>
 
-          <button onClick={handleNextWeek}
+          <button onClick={()=>setNextPhaseConfirm(true)}
             style={{marginTop:'auto',background:'#D4AF37',color:'white',padding:'1.5rem',borderRadius:'1.75rem',fontWeight:900,fontSize:'1.2rem',border:'none',cursor:'pointer',boxShadow:'8px 8px 0 #2D2D2D',display:'flex',alignItems:'center',justifyContent:'center',gap:'0.5rem'}}>
             NEXT PHASE <Icons.ChevronRight size={24} color="white"/>
           </button>
@@ -1873,6 +2110,11 @@ function App() {
                 <p style={{fontSize:'1.5rem',fontWeight:'bold',fontStyle:'italic',color:'#64748b',margin:0}}>"{content.translation}"</p>
               </div>
               <p style={{fontSize:'1.4rem',lineHeight:1.6,fontWeight:'bold',color:'#334155',padding:'0 0.5rem',margin:0}}>{content.learning}</p>
+              {content.teacherNote && (
+                <div style={{background:'#fefce8',border:'3px solid #D4AF37',borderRadius:'1.25rem',padding:'1.1rem 1.25rem'}}>
+                  <p style={{fontSize:'0.92rem',fontWeight:700,color:'#92400e',margin:0,lineHeight:1.65}}>{content.teacherNote}</p>
+                </div>
+              )}
               <BlessingPanel weekId={currentWeek} isHeritage={false}/>
               {content.middah && <MiddahPanel middah={content.middah} accent="#1A365D"/>}
               <MoreResourcesPanel weekId={currentWeek} accent="#1A365D"/>
@@ -1902,7 +2144,16 @@ function App() {
               <div style={{padding:'2.5rem',background:'#eff6ff',borderRadius:'9999px',border:'4px solid #1A365D'}}>
                 <Icons.Chat size={90} color="#1A365D"/>
               </div>
-              <h3 style={{fontSize:'2.5rem',fontWeight:900,maxWidth:'700px',color:'#1A365D',fontStyle:'italic',lineHeight:1.3,margin:0}}>"{content.discussion}"</h3>
+              <h3 style={{fontSize:'2.5rem',fontWeight:900,maxWidth:'700px',color:'#1A365D',fontStyle:'italic',lineHeight:1.3,margin:0}}>
+                "{gradeBand==='younger' && content.discussionYounger ? content.discussionYounger : gradeBand==='older' && content.discussionOlder ? content.discussionOlder : content.discussion}"
+              </h3>
+              {(content.discussionYounger || content.discussionOlder) && gradeBand !== 'both' && (
+                <div style={{background:'#f0fdf4',border:'2px solid #86efac',borderRadius:'0.75rem',padding:'0.5rem 1rem',display:'flex',alignItems:'center',gap:'0.5rem'}}>
+                  <span style={{fontSize:'0.8rem',fontWeight:900,color:'#15803d',textTransform:'uppercase',letterSpacing:'0.06em'}}>
+                    {gradeBand==='younger'?'Grades 3–5 prompt':'Grades 6–7 prompt'}
+                  </span>
+                </div>
+              )}
               <div style={{background:'#f1f5f9',padding:'0.75rem 2rem',borderRadius:'1rem',display:'flex',alignItems:'center',gap:'0.75rem'}}>
                 <Icons.Users size={26} color="#64748b"/>
                 <span style={{fontWeight:900,fontSize:'1rem',textTransform:'uppercase',letterSpacing:'0.1em',color:'#64748b'}}>Team Conversation</span>
@@ -2073,6 +2324,11 @@ function App() {
               {content.game.type==='endurance' && (
                 <div style={{display:'flex',flexDirection:'column',gap:'0.75rem'}}>
                   <PairDisplay students={students}/>
+                  {content.game.teacherNote && (
+                    <div style={{background:'#fefce8',border:'2px solid #fde68a',borderRadius:'1rem',padding:'0.85rem 1.1rem',fontSize:'0.9rem',fontWeight:700,color:'#92400e'}}>
+                      {content.game.teacherNote}
+                    </div>
+                  )}
                   {content.game.tasks.map((task,idx)=>{
                     const done=gameStep>idx, active=gameStep===idx, revealed=revealedTasks[idx];
                     return (
@@ -2095,7 +2351,6 @@ function App() {
                 </div>
               )}
 
-              {/* QUIZ */}
               {content.game.type==='quiz' && (
                 <div style={{display:'flex',flexDirection:'column',gap:'1.5rem',textAlign:'center',paddingBottom:'1.5rem'}}>
                   {content.game.questions[gameStep] ? (
@@ -2104,13 +2359,21 @@ function App() {
                         <p className="font-display" style={{fontSize:'2.5rem',color:'#1e293b',letterSpacing:'0.03em',margin:0}}>{content.game.questions[gameStep].q}</p>
                       </div>
                       <div style={{display:'flex',flexDirection:'column',gap:'0.75rem'}}>
-                        {content.game.questions[gameStep].options.map((opt,i)=>(
-                          <button key={i}
-                            onClick={()=>{const q=content.game.questions[gameStep]; if(opt===q.a) handleCorrect(q.info,q.gematria33||null); else flashWrong();}}
-                            style={{padding:'1.75rem',background:'white',border:'4px solid #2D2D2D',borderRadius:'1.75rem',fontSize:'1.75rem',fontWeight:900,cursor:'pointer',transition:'all 0.15s',boxShadow:'0 4px 12px rgba(0,0,0,0.08)'}}>
-                            {opt}
-                          </button>
-                        ))}
+                        {content.game.questions[gameStep].options.map((opt,i)=>{
+                          const isWrong = quizWrongIdx === `${gameStep}-${i}`;
+                          return (
+                            <button key={i}
+                              onClick={()=>{
+                                const q=content.game.questions[gameStep];
+                                if(opt===q.a) { setQuizWrongIdx(null); handleCorrect(q.info,q.gematria33||null); }
+                                else { flashWrong(); setQuizWrongIdx(`${gameStep}-${i}`); setTimeout(()=>setQuizWrongIdx(null),1800); }
+                              }}
+                              style={{padding:'1.75rem',background:isWrong?'#fef2f2':'white',border:`4px solid ${isWrong?'#ef4444':'#2D2D2D'}`,borderRadius:'1.75rem',fontSize:'1.75rem',fontWeight:900,cursor:'pointer',transition:'all 0.15s',boxShadow:'0 4px 12px rgba(0,0,0,0.08)',display:'flex',alignItems:'center',justifyContent:'center',gap:'0.75rem',color:isWrong?'#b91c1c':'#1e293b'}}>
+                              {isWrong && <Icons.XCircle size={32} color="#ef4444"/>}
+                              {opt}
+                            </button>
+                          );
+                        })}
                       </div>
                     </>
                   ) : (
@@ -2164,12 +2427,24 @@ function App() {
                     )}
                     {appTab==='all49' && (
                       <div style={{display:'flex',flexDirection:'column',gap:'0.75rem'}}>
-                        <div style={{display:'flex',alignItems:'center',gap:'0.75rem',marginBottom:'0.25rem'}}>
+                        <div style={{display:'flex',alignItems:'center',gap:'0.75rem',marginBottom:'0.25rem',flexWrap:'wrap'}}>
                           <span style={{fontWeight:900,color:'#1A365D',fontSize:'0.9rem'}}>Jump to day:</span>
                           <input type="number" min="1" max="49" placeholder="1–49" value={searchDay}
                             onChange={e=>setSearchDay(e.target.value)}
                             style={{border:'3px solid #1A365D',borderRadius:'0.75rem',padding:'0.4rem 0.8rem',fontSize:'1rem',fontWeight:'bold',outline:'none',width:'100px'}}/>
                           {searchDay && <button onClick={()=>setSearchDay('')} style={{background:'#f1f5f9',border:'2px solid #e2e8f0',borderRadius:'0.5rem',padding:'0.3rem 0.6rem',fontWeight:900,cursor:'pointer',fontSize:'0.85rem'}}>Clear</button>}
+                          {(() => {
+                            const omerStarts = [new Date('2025-04-13'),new Date('2026-04-02'),new Date('2027-04-22')];
+                            const today = new Date(); today.setHours(0,0,0,0);
+                            let todayDay = null;
+                            for (const start of omerStarts) { const d=Math.floor((today-start)/86400000)+1; if(d>=1&&d<=49){todayDay=d;break;} }
+                            return todayDay ? (
+                              <button onClick={()=>setSearchDay(String(todayDay))}
+                                style={{background:'#D4AF37',color:'white',border:'none',borderRadius:'0.75rem',padding:'0.4rem 0.9rem',fontWeight:900,cursor:'pointer',fontSize:'0.85rem',display:'flex',alignItems:'center',gap:'0.35rem'}}>
+                                <Icons.Star size={14} color="white"/> Today (Day {todayDay})
+                              </button>
+                            ) : null;
+                          })()}
                         </div>
                         {(filtered ? [null] : weekGroups).map((group, wi) => (
                           <div key={wi} style={{display:'flex',flexDirection:'column',gap:'0.35rem'}}>
@@ -2199,7 +2474,7 @@ function App() {
                           {[
                             { label:"Sefaria: Leviticus 23:15 (source)", url:"https://www.sefaria.org/Leviticus.23.15?lang=bi", color:"#004E5F" },
                             { label:"My Jewish Learning: The Omer", url:"https://www.myjewishlearning.com/article/counting-the-omer/", color:"#1A365D" },
-                            { label:"Chabad: Full Omer Counting", url:"https://www.chabad.org/holidays/sefirat_haomer/default_cdo/jewish/Sefirat-HaOmer.htm", color:"#8B0000" },
+                            { label:"My Jewish Learning: Sefirat HaOmer", url:"https://www.myjewishlearning.com/article/sefirat-ha-omer/", color:"#8B0000" },
                             { label:"The iCenter: Teaching the Omer", url:"https://theicenter.org/", color:"#2d6a4f" },
                           ].map((r,i)=>(
                             <a key={i} href={r.url} target="_blank" rel="noopener noreferrer"
@@ -2277,14 +2552,16 @@ function App() {
       </div>
 
       {/* FOOTER NAV */}
-      <div style={{display:'flex',justifyContent:'center',gap:'0.75rem',background:'rgba(255,255,255,0.4)',padding:'0.75rem 1rem',borderRadius:'9999px',border:'2px solid #e2e8f0',flexWrap:'wrap'}}>
+      <div style={{display:'flex',justifyContent:'center',gap:'0.6rem',background:'white',padding:'1rem 1.5rem',borderRadius:'2rem',border:'4px solid #2D2D2D',flexWrap:'wrap',boxShadow:'0 4px 16px rgba(0,0,0,0.12)'}}>
+        <span style={{display:'flex',alignItems:'center',fontWeight:900,fontSize:'0.7rem',color:'#94a3b8',textTransform:'uppercase',letterSpacing:'0.1em',marginRight:'0.25rem',flexShrink:0}}>Jump to Week:</span>
         {WEEK_SEQUENCE.map(w=>(
           <button key={w} onClick={()=>jumpToWeek(w)} title={WEEK_CONTENT[w].title}
-            style={{padding:'0.5rem 1.5rem',borderRadius:'1.25rem',fontWeight:900,border:'4px solid',cursor:'pointer',transition:'all 0.15s',fontSize:'0.85rem',
+            style={{padding:'0.65rem 1.75rem',borderRadius:'1.25rem',fontWeight:900,border:'4px solid',cursor:'pointer',transition:'all 0.15s',fontSize:'1rem',
               background:currentWeek===w?'#1A365D':'white',
-              color:currentWeek===w?'white':'#cbd5e1',
-              borderColor:currentWeek===w?'#1A365D':'#e2e8f0',
-              boxShadow:currentWeek===w?'0 4px 16px rgba(26,54,93,0.3)':'none'}}>
+              color:currentWeek===w?'white':'#334155',
+              borderColor:currentWeek===w?'#1A365D':'#94a3b8',
+              boxShadow:currentWeek===w?'0 4px 16px rgba(26,54,93,0.35)':'none',
+              transform:currentWeek===w?'translateY(-2px)':'none'}}>
             {w===33?'D33':w===28?'D28':w===29?'D29':`W${w}`}
           </button>
         ))}
