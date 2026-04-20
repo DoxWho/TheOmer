@@ -1,0 +1,2299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Harvest Path — Sefirat HaOmer</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;700;900&display=swap');
+    body { margin: 0; padding: 0; background: #FDFBF7; }
+    * { box-sizing: border-box; }
+    .font-display { font-family: 'Bebas Neue', sans-serif; }
+    .font-body { font-family: 'DM Sans', sans-serif; }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+
+    /* ── HERITAGE CARD ── */
+    .heritage-card {
+      background: linear-gradient(135deg, #001f6b 0%, #0038b8 60%, #1a5dd4 100%);
+      border: 6px solid #0038b8 !important;
+      position: relative;
+      overflow: hidden;
+    }
+    .heritage-card::before {
+      content: '';
+      position: absolute;
+      top: -40px; right: -40px;
+      width: 120px; height: 120px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 50%;
+    }
+    .heritage-card::after {
+      content: '';
+      position: absolute;
+      bottom: -30px; left: -30px;
+      width: 90px; height: 90px;
+      background: rgba(255,255,255,0.04);
+      border-radius: 50%;
+    }
+    .heritage-modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,50,0.92);
+      z-index: 400;
+      display: flex; align-items: center; justify-content: center;
+      padding: 1rem;
+    }
+    .heritage-modal {
+      background: white;
+      border: 8px solid #0038b8;
+      border-radius: 2.5rem;
+      max-width: 860px;
+      width: 100%;
+      max-height: 92vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 30px 80px rgba(0,56,184,0.4);
+      overflow: hidden;
+    }
+    .heritage-tab-bar {
+      display: flex;
+      border-bottom: 4px solid #e0e9ff;
+    }
+    .heritage-tab {
+      flex: 1;
+      padding: 1rem 0.5rem;
+      font-weight: 900;
+      font-size: 0.95rem;
+      border: none;
+      cursor: pointer;
+      transition: all 0.15s;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .heritage-tab.active {
+      background: #0038b8;
+      color: white;
+    }
+    .heritage-tab:not(.active) {
+      background: white;
+      color: #94a3b8;
+    }
+    .heritage-tab:not(.active):hover {
+      background: #f0f5ff;
+      color: #0038b8;
+    }
+    .heritage-section-title {
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: #0038b8;
+      margin: 0 0 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .heritage-body-text {
+      font-size: 1.1rem;
+      line-height: 1.75;
+      color: #334155;
+      font-weight: 500;
+    }
+    .heritage-callout {
+      background: #f0f5ff;
+      border-left: 5px solid #0038b8;
+      border-radius: 0 0.75rem 0.75rem 0;
+      padding: 1rem 1.25rem;
+      margin: 1rem 0;
+    }
+    .heritage-callout p { margin: 0; font-size: 1rem; color: #1e3a8a; font-weight: 700; line-height: 1.6; }
+    .heritage-challenge-card {
+      background: #0038b8;
+      color: white;
+      border-radius: 1.5rem;
+      padding: 1.5rem;
+      margin-top: 0.75rem;
+    }
+    .heritage-challenge-card h4 { margin: 0 0 0.6rem; font-size: 1.1rem; font-weight: 900; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.08em; }
+    .heritage-challenge-card p { margin: 0; font-size: 1.05rem; line-height: 1.6; font-weight: 700; }
+    .heritage-complete-btn {
+      background: #0038b8;
+      color: white;
+      border: none;
+      border-radius: 1.5rem;
+      padding: 1.1rem 2rem;
+      font-size: 1.2rem;
+      font-weight: 900;
+      cursor: pointer;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      font-family: 'Bebas Neue', sans-serif;
+      letter-spacing: 0.08em;
+      transition: background 0.15s;
+    }
+    .heritage-complete-btn:hover { background: #002a8f; }
+    .heritage-complete-btn.completed { background: #15803d; }
+    .magen-david {
+      display: inline-block;
+      font-size: 1.6rem;
+      line-height: 1;
+    }
+    @keyframes pulse { 0%,100% { transform:scale(1); box-shadow:0 0 0 0 rgba(255,255,255,0.4); } 50% { transform:scale(1.05); box-shadow:0 0 0 10px rgba(255,255,255,0); } }
+    @keyframes bounce {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+    }
+  </style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect } = React;
+
+const Icons = {
+  Wheat: ({ size=24, color="currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="12" y1="22" x2="12" y2="6"/>
+      <path d="M12 6C12 6 8 4 7 1C9 1 11 3 12 6Z" fill={color} stroke="none"/>
+      <path d="M12 6C12 6 16 4 17 1C15 1 13 3 12 6Z" fill={color} stroke="none"/>
+      <path d="M12 10C12 10 8 8 7 5C9 5 11 7 12 10Z" fill={color} stroke="none"/>
+      <path d="M12 10C12 10 16 8 17 5C15 5 13 7 12 10Z" fill={color} stroke="none"/>
+      <path d="M12 14C12 14 8 12 7 9C9 9 11 11 12 14Z" fill={color} stroke="none"/>
+      <path d="M12 14C12 14 16 12 17 9C15 9 13 11 12 14Z" fill={color} stroke="none"/>
+    </svg>
+  ),
+  Flame: ({ size=24, color="currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+      <path d="M12 2C12 2 7 8 7 13a5 5 0 0010 0c0-2-1-4-2-5 0 2-1 3-2 3-1 0-2-1-2-3 0-2 1-4 1-4z" fill={color}/>
+      <path d="M12 14c0 1.1-.9 2-2 2 .5 1 1.5 2 2 2s1.5-1 2-2c-1.1 0-2-.9-2-2z" fill="white" opacity="0.4"/>
+    </svg>
+  ),
+  Trophy: ({ size=24, color="currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M6 9H4a2 2 0 01-2-2V5h4"/><path d="M18 9h2a2 2 0 002-2V5h-4"/>
+      <path d="M6 5h12v5a6 6 0 01-12 0V5z"/><path d="M12 16v4"/><path d="M8 20h8"/>
+    </svg>
+  ),
+  Book: ({ size=24, color="currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M2 6a2 2 0 012-2h7l1 1v13l-1 1H4a2 2 0 01-2-2V6z"/>
+      <path d="M22 6a2 2 0 00-2-2h-7l-1 1v13l1 1h7a2 2 0 002-2V6z"/>
+      <line x1="12" y1="5" x2="12" y2="19"/>
+    </svg>
+  ),
+  Chat: ({ size=24, color="currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+    </svg>
+  ),
+  Medal: ({ size=24, color="currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="14" r="6"/><path d="M9 3h6l1 5H8L9 3z"/>
+      <path d="M9 8l-2 6M15 8l2 6"/>
+    </svg>
+  ),
+  Users: ({ size=24, color="currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="9" cy="7" r="3"/><path d="M3 21v-2a4 4 0 014-4h4a4 4 0 014 4v2"/>
+      <circle cx="17" cy="7" r="3" opacity="0.5"/><path d="M21 21v-2a4 4 0 00-3-3.87" opacity="0.5"/>
+    </svg>
+  ),
+  Question: ({ size=24, color="currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="10"/>
+      <path d="M9.1 9a3 3 0 015.8 1c0 2-3 3-3 3"/>
+      <circle cx="12" cy="17" r="0.8" fill={color}/>
+    </svg>
+  ),
+  Refresh: ({ size=24, color="currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M23 4v6h-6"/><path d="M1 20v-6h6"/>
+      <path d="M3.5 9a9 9 0 0114.8-3.5L23 10M1 14l4.7 4.5A9 9 0 0020.5 15"/>
+    </svg>
+  ),
+  Check: ({ size=24, color="#16a34a" }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="10" fill="#f0fdf4" stroke={color} strokeWidth="1.5"/>
+      <polyline points="7,12 10,15 17,9"/>
+    </svg>
+  ),
+  Download: ({ size=24, color="currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+      <polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/>
+    </svg>
+  ),
+  Play: ({ size=24, color="currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill={color}>
+      <circle cx="12" cy="12" r="11" fill="none" stroke={color} strokeWidth="1.5"/>
+      <polygon points="10,8 18,12 10,16"/>
+    </svg>
+  ),
+  Mountain: ({ size=24, color="currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <polygon points="3,20 12,4 21,20"/>
+      <polyline points="9,12 12,8 15,12" stroke="white" strokeWidth="1.5" fill="none"/>
+    </svg>
+  ),
+  Star: ({ size=24, color="#facc15" }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill={color}>
+      <polygon points="12,2 15.1,8.3 22,9.3 17,14.1 18.2,21 12,17.8 5.8,21 7,14.1 2,9.3 8.9,8.3"/>
+    </svg>
+  ),
+  Sparkle: ({ size=24, color="#D4AF37" }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round">
+      <line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/>
+      <line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/>
+      <line x1="4.9" y1="4.9" x2="7.8" y2="7.8"/><line x1="16.2" y1="16.2" x2="19.1" y2="19.1"/>
+      <line x1="19.1" y1="4.9" x2="16.2" y2="7.8"/><line x1="7.8" y1="16.2" x2="4.9" y2="19.1"/>
+    </svg>
+  ),
+  Switch: ({ size=24, color="currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M7 16V4m0 0L3 8m4-4l4 4"/><path d="M17 8v12m0 0l4-4m-4 4l-4-4"/>
+    </svg>
+  ),
+  Eye: ({ size=24, color="currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+    </svg>
+  ),
+  EyeOff: ({ size=24, color="currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M17.9 17.9A10.9 10.9 0 0112 20C5 20 1 12 1 12a18.5 18.5 0 015.1-5.9M9.9 4.2A10 10 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.2 3.2M1 1l22 22"/>
+    </svg>
+  ),
+  Shield: ({ size=24, color="currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+    </svg>
+  ),
+  ChevronRight: ({ size=24, color="currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="9,18 15,12 9,6"/>
+    </svg>
+  ),
+  X: ({ size=24, color="currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round">
+      <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+    </svg>
+  ),
+  XCircle: ({ size=24, color="currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="10"/>
+      <line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>
+    </svg>
+  ),
+  ExternalLink: ({ size=24, color="currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
+      <polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/>
+    </svg>
+  ),
+  Heart: ({ size=24, color="currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+    </svg>
+  ),
+  Hands: ({ size=24, color="currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M18 11V6a2 2 0 00-2-2v0a2 2 0 00-2 2v0"/>
+      <path d="M14 10V4a2 2 0 00-2-2v0a2 2 0 00-2 2v2"/>
+      <path d="M10 10.5V6a2 2 0 00-2-2v0a2 2 0 00-2 2v8"/>
+      <path d="M18 8a2 2 0 114 0v6a8 8 0 01-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 012.83-2.82L7 15"/>
+    </svg>
+  ),
+  MoreHoriz: ({ size=24, color="currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="5" cy="12" r="1.5" fill={color}/><circle cx="12" cy="12" r="1.5" fill={color}/><circle cx="19" cy="12" r="1.5" fill={color}/>
+    </svg>
+  ),
+  Sound: ({ size=24, color="currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <polygon points="11,5 6,9 2,9 2,15 6,15 11,19"/><path d="M15.54 8.46a5 5 0 010 7.07"/><path d="M19.07 4.93a10 10 0 010 14.14"/>
+    </svg>
+  ),
+  Blessing: ({ size=24, color="currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/>
+    </svg>
+  ),
+  Mail: ({ size=24, color="currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+      <polyline points="22,6 12,13 2,6"/>
+    </svg>
+  ),
+  BookOpen: ({ size=24, color="currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/>
+      <path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/>
+    </svg>
+  ),
+  Search: ({ size=24, color="currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+    </svg>
+  ),
+  Scroll: ({ size=24, color="currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+      <polyline points="14,2 14,8 20,8"/>
+      <line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
+      <polyline points="10,9 9,9 8,9"/>
+    </svg>
+  ),
+  Lightbulb: ({ size=24, color="currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="9" y1="18" x2="15" y2="18"/><line x1="10" y1="22" x2="14" y2="22"/>
+      <path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0018 8 6 6 0 006 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 018.91 14"/>
+    </svg>
+  ),
+  Link: ({ size=24, color="currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/>
+      <path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/>
+    </svg>
+  ),
+
+  Settings: ({ size=24, color="currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="3"/>
+      <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/>
+    </svg>
+  ),
+  Plus: ({ size=24, color="currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round">
+      <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+    </svg>
+  ),
+  Trash: ({ size=24, color="currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="3,6 5,6 21,6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/>
+    </svg>
+  ),
+  Edit: ({ size=24, color="currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+      <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+    </svg>
+  ),
+  Dice: ({ size=24, color="currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="2" y="2" width="20" height="20" rx="3"/>
+      <circle cx="8" cy="8" r="1.2" fill={color}/><circle cx="16" cy="8" r="1.2" fill={color}/>
+      <circle cx="8" cy="16" r="1.2" fill={color}/><circle cx="16" cy="16" r="1.2" fill={color}/>
+      <circle cx="12" cy="12" r="1.2" fill={color}/>
+    </svg>
+  ),
+  Clock: ({ size=24, color="currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/>
+    </svg>
+  ),
+};
+
+const DEFAULT_STUDENTS = ["Abby","Marshall","Julianna","Kai","Eliana","Adi","Aaron","Isaac","Avery P.","David","Brenner","Aviv","Avery W."];
+const WEEK_SEQUENCE = [1, 2, 3, 4, 28, 29, 33, 5, 6, 7];
+const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+const WEEK_CONTENT = {
+  1: {
+    id:1, title:"Week 1: Chesed", hebrewTitle:"חסד",
+    middah:{ name:"Chesed — Loving-Kindness", hebrewName:"חֶסֶד", practice:"This week, perform one unexpected act of kindness each day — for a friend, a family member, or a stranger. Write it down in your Omer journal.", verse:"Love your neighbor as yourself. (Leviticus 19:18)", mitzvah:"The mitzvah of Gemilut Chasadim (גְמִילוּת חֲסָדִים) — acts of loving-kindness — is one of the three pillars on which the world stands. Unlike tzedakah, which is done with money, Gemilut Chasadim is done with your whole self: your time, your presence, your heart." },
+    middah:{ name:"Chesed — Loving-Kindness", hebrewName:"חֶסֶד", practice:"This week, perform one unexpected act of kindness each day — for a friend, a family member, or a stranger. Write it down in your Omer journal.", verse:"Love your neighbor as yourself. (Leviticus 19:18)", mitzvah:"The mitzvah of Gemilut Chasadim (גְּמִילוּת חֲסָדִים) — acts of loving-kindness — is one of the three pillars on which the world stands. Unlike tzedakah which is done with money, Gemilut Chasadim is done with your whole self: your time, your presence, your heart." },
+    quote:"עוֹלָם חֶסֶד יִבָּנֶה", translation:"The world is built on kindness. (Psalm 89:3)",
+    learning:"Chesed is expansive love. Abraham's tent had four doors so he could see guests coming from any direction. Kindness is not just being nice — it is actively looking for opportunities to give.",
+    discussion:"If Chesed is 'giving without limits,' is there ever a time where giving too much might be a problem?",
+    game:{ title:"Chesed Secret Charades", type:"charades",
+      instructions:"Click 'New Guessers' to pick 3 students. Then click 'Reveal' to show the actor their task.",
+      tasks:["Helping carry groceries","Sharing an umbrella","Comforting a friend","Donating a toy","Planting a tree"] }
+  },
+  2: {
+    id:2, title:"Week 2: Gevurah", hebrewTitle:"גבורה",
+    middah:{ name:"Gevurah — Discipline & Boundaries", hebrewName:"גְּבוּרָה", practice:"Choose one thing this week to say 'no' to — something that pulls you away from your best self. This is not about restriction; it is about focus.", verse:"Who is strong? One who masters their impulses. (Pirkei Avot 4:1)", mitzvah:"The mitzvah of Lo Titgodedu — not following the crowd when the crowd is wrong — requires inner strength. Gevurah gives us the courage to hold our own standards even when it is harder." },
+    quote:"אֵיזֶהוּ גִבּוֹר? הַכּוֹבֵשׁ אֶת יִצְרוֹ", translation:"Who is strong? One who masters their own impulses. (Pirkei Avot 4:1)",
+    learning:"Gevurah is 'Strength' through boundaries. Just as a dam holds back water to create power, Gevurah focuses our energy. It is the strength to say 'No' to ourselves.",
+    discussion:"Why do we need rules? If there were no rules in soccer or chess, would the game still be fun?",
+    game:{ title:"The Gevurah Shield", type:"sort",
+      instructions:"Select ONLY the Boundary behaviors to build the shield. Choosing Chaos breaks it!",
+      items:[
+        { text:"Finishing homework first", type:"boundary" },
+        { text:"Interrupting people", type:"chaos" },
+        { text:"Setting a screen time limit", type:"boundary" },
+        { text:"Candy for breakfast", type:"chaos" },
+        { text:"Listening to instructions", type:"boundary" }
+      ] }
+  },
+  3: {
+    id:3, title:"Week 3: Tiferet", hebrewTitle:"תפארת",
+    middah:{ name:"Tiferet — Compassion & Balance", hebrewName:"תִּפְאֶרֶת", practice:"This week, find one moment each day to hold two truths at once: be honest AND be kind. Notice how that feels different from being only one or the other.", verse:"Truth and kindness go before You. (Psalm 89:15)", mitzvah:"The mitzvah of Dan l'chaf zechut — judging others favorably — is the practice of Tiferet in daily life. Before assuming the worst about someone, pause and imagine the most generous explanation for their behavior." },
+    quote:"צֶדֶק וּמִשְׁפָּט מְכוֹן כִּסְאֶךָ חֶסֶד וֶאֱמֶת יְקַדְּמוּ פָנֶיךָ",
+    translation:"Righteousness and justice are the foundation of Your throne; kindness and truth go before You. (Psalm 89:15)",
+    learning:"Tiferet is the 'Beautiful Balance.' It sits at the heart of the Sefirot tree, combining the unlimited giving of Chesed with the focused discipline of Gevurah to create Rachamim — Compassion.",
+    discussion:"Think of a time you were both firm (Gevurah) AND kind (Chesed) at the same time. How did that feel?",
+    game:{ title:"Harmony Match-Up", type:"matching",
+      instructions:"Click an Action on the left, then click its Sefirah on the right.",
+      pairs:[
+        { q:"Giving an anonymous gift", a:"Chesed" },
+        { q:"Following a difficult fast", a:"Gevurah" },
+        { q:"Forgiving a friend's mistake", a:"Tiferet" }
+      ] }
+  },
+  4: {
+    id:4, title:"Week 4: Netzach", hebrewTitle:"נצח",
+    middah:{ name:"Netzach — Perseverance", hebrewName:"נֶצַח", practice:"Start something small this week that you commit to doing every single day — a short prayer, a stretching routine, a line of Hebrew practice. Don't break the chain.", verse:"The endurance of Israel does not fail. (1 Samuel 15:29)", mitzvah:"The mitzvah of Talmud Torah — daily Torah learning — is the classic Jewish practice of Netzach. Even one minute of Torah study each day, without fail, builds a spiritual foundation that accumulates over years." },
+    quote:"נֵצַח יִשְׂרָאֵל לֹא יְשַׁקֵּר", translation:"The Endurance of Israel does not fail. (1 Samuel 15:29)",
+    learning:"Netzach means 'Endurance' or 'Victory.' It is the grit to keep going when things get hard. Think of the marathon runner — not the fastest sprinter, but the one who finishes. That is the spirit of Netzach in our spiritual lives.",
+    discussion:"What is something you worked on for a long time without giving up? What kept you going?",
+    game:{ title:"Endurance Relay", type:"endurance",
+      instructions:"Generate pairs first. One partner holds a weight while the other answers. Show Hebrew to check.",
+      tasks:[
+        { q:"Name the 2 Shabbat commandments", a:"זָכוֹר וְשָׁמוֹר — Remember and Keep (Zachor v'Shamor)" },
+        { q:"Name the 3 Patriarchs", a:"אַבְרָהָם, יִצְחָק, יַעֲקֹב" },
+        { q:"Name the 4 Matriarchs", a:"שָׂרָה, רִבְקָה, רָחֵל, לֵאָה" },
+        { q:"Name the 5 Books of Torah", a:"בְּרֵאשִׁית, שְׁמוֹת, וַיִּקְרָא, בַּמִּדְבַּר, דְּבָרִים" }
+      ] }
+  },
+  28: {
+    id:28, title:"Day 28: Yom Hazikaron", hebrewTitle:"יוֹם הַזִּכָּרוֹן",
+    quote:"אֵלֶּה אֶזְכְּרָה וְנַפְשִׁי עָלַי אֶשְׁפְּכָה",
+    translation:"These I remember, and my soul pours itself out within me.",
+    learning:"Yom Hazikaron — Israel's Memorial Day — falls on the 4th of Iyar, the day before Independence Day. Today we honor the soldiers of the Israel Defense Forces and victims of terror who gave their lives. Open this module to explore the history of the Silver Platter, the siren tradition, and how we connect to Israel's fallen.",
+    discussion:"Click 'Challenge' above to open the full Heritage Module for Yom Hazikaron.",
+    game:{ title:"Heritage Module", type:"heritage", heritageDay:28 }
+  },
+  29: {
+    id:29, title:"Day 29: Yom Ha'atzmaut", hebrewTitle:"יוֹם הָעַצְמָאוּת",
+    quote:"עוֹד לֹא אָבְדָה תִּקְוָתֵנוּ",
+    translation:"Our hope is not yet lost. (Hatikvah)",
+    learning:"Yom Ha'atzmaut — Israel's Independence Day — is celebrated on the 5th of Iyar. In 1948, David Ben-Gurion proclaimed the establishment of the State of Israel, ending 2,000 years of Jewish statelessness. Open this module to explore Megillat Ha'atzmaut and modern Israeli achievements.",
+    discussion:"Click 'Challenge' above to open the full Heritage Module for Yom Ha'atzmaut.",
+    game:{ title:"Heritage Module", type:"heritage", heritageDay:29 }
+  },
+  33: {
+    id:33, title:"Lag BaOmer", hebrewTitle:"ל״ג בָּעֹמֶר",
+    quote:"תּוֹרַת אֱמֶת הָיְתָה בְּפִיהוּ", translation:"The Torah of truth was in his mouth. (Malachi 2:6)",
+    learning:"We celebrate Rabbi Shimon bar Yochai (Rashbi), who lived in the 2nd century CE. A devoted student of Rabbi Akiva, he was sentenced to death by the Roman Empire for publicly criticizing their government. He and his son hid in a cave for 13 years, emerging transformed. During that time, Rashbi authored the Zohar — not the Torah itself, but a profound mystical commentary uncovering the Torah's hidden spiritual layers. It became the foundation of Kabbalah. When he finally emerged, it was said he radiated inner light.",
+    discussion:"Rashbi taught that the hidden, inner meaning of Torah matters as much as its surface. Why does intention — the 'why' behind what we do — matter in a mitzvah?",
+    game:{ title:"Bonfire Trivia", type:"quiz",
+      instructions:"Answer to keep the fire bright! Tap GEMATRIA? for a hint.",
+      questions:[
+        { q:"What did Rashbi write that became the foundation of Jewish mysticism?", a:"The Zohar",
+          options:["The Torah","The Zohar","The Mishnah"],
+          info:"The Zohar is Rashbi's mystical commentary on the Torah and the foundational text of Kabbalah. It explores hidden spiritual layers beneath the Torah's surface meaning — it is not the Torah itself.",
+          gematria33:"The number 33 resonates through creation itself. In the opening story of creation in Genesis (1:1–2:4), the name of God — Elohim — appears exactly 33 times, making 33 the numerical signature of Divine creative energy. In some mystical teachings, a human being has 33 spinal vertebrae, representing 33 'rungs' or elevations of consciousness needed to rise toward the spiritual realm. And Lag BaOmer — the 33rd day of the Omer — stands as a sacred bridge between the miracles of the Red Sea and the ultimate revelation waiting at Sinai." },
+        { q:"How many years did Rashbi and his son hide in a cave?", a:"13",
+          options:["7","13","40"],
+          info:"Rashbi was hiding from the Roman Empire, who condemned him to death for criticizing their rule. He used those 13 years of isolation to receive deep mystical insight alongside his son Elazar." },
+        { q:"What number does 'Lag' equal in Gematria?", a:"33",
+          options:["18","33","49"],
+          info:"Lamed (ל) = 30. Gimmel (ג) = 3. Together, Lag = 33 — the 33rd day of the Omer counting.",
+          gematria33:"The number 33 resonates through creation itself. In Genesis (1:1–2:4), the name of God — Elohim — appears exactly 33 times, marking 33 as the numerical signature of Divine creative energy. In mystical teachings, the human spine has 33 vertebrae representing 33 elevations of consciousness. And Lag BaOmer — this very day — bridges the miracles of the Red Sea and the revelation at Sinai." }
+      ] }
+  },
+  5: {
+    id:5, title:"Week 5: Hod", hebrewTitle:"הוֹד",
+    middah:{ name:"Hod — Gratitude & Humility", hebrewName:"הוֹד", practice:"Begin each morning this week by naming three things you are grateful for before looking at your phone. End each night by thanking one person who helped you that day.", verse:"I give thanks before You. (Morning Prayer — Modeh Ani)", mitzvah:"The mitzvah of Hakarat HaTov (הַכָּרַת הַטּוֹב) — recognizing the good — goes deeper than just saying 'thank you.' It means genuinely noticing that what we have is a gift. Every morning prayer begins with this: Modeh Ani, I give thanks." },
+    quote:"מוֹדֶה אֲנִי לְפָנֶיךָ", translation:"I give thanks before You. (Morning Prayer)",
+    learning:"Hod is 'Splendor' — expressed through humility and gratitude. It is the quality of stepping back to say 'Thank You,' recognizing that our gifts and achievements are not ours alone. Aaron, the High Priest, embodied Hod: he served others with joy, never seeking the spotlight.",
+    discussion:"Is it harder to be a winner with humility, or a loser with grace? Which takes more strength?",
+    game:{ title:"The A-Z Gratitude Grid", type:"gratitude",
+      instructions:"Click 'Call Student' to reveal who answers each letter. Work through A to Z as a class!" }
+  },
+  6: {
+    id:6, title:"Week 6: Yesod", hebrewTitle:"יְסוֹד",
+    middah:{ name:"Yesod — Integrity & Connection", hebrewName:"יְסוֹד", practice:"This week, keep every promise you make — no matter how small. If you say you will text someone back, do it. If you say you will be somewhere, be there. Let your word be your foundation.", verse:"The righteous one is the foundation of the world. (Proverbs 10:25)", mitzvah:"The mitzvah of Eilu v'Eilu — honoring connection within community — reminds us that we are part of something larger. Yesod is not just personal integrity; it is being the kind of person the community can build upon." },
+    quote:"וְצַדִּיק יְסוֹד עוֹלָם", translation:"The righteous one is the foundation of the world. (Proverbs 10:25)",
+    learning:"Yesod means 'Foundation.' It is the stable, deep base that makes genuine connection possible — like a bridge that only holds because its pillars are buried deep. Yesod is about being someone others can truly lean on: reliable, steady, trustworthy. Connection is the fruit; Foundation is the root.",
+    discussion:"Who is a 'Yesod' in your life — someone who is a steady foundation for you? What makes them that way?",
+    game:{ title:"Trust Connection", type:"trust",
+      instructions:"Generate pairs first. The Leader (facing the board) guides their partner using only words. No touching!",
+      tasks:[
+        { q:"Raise your right hand slowly. Now raise your left. Touch your nose with your right hand, then clap once.", switchAfter:true },
+        { q:"Tap both knees twice. Fold your hands, lift them above your head, and bring them back down slowly." }
+      ] }
+  },
+  7: {
+    id:7, title:"Week 7: Malchut", hebrewTitle:"מַלְכוּת",
+    middah:{ name:"Malchut — Leadership & Presence", hebrewName:"מַלְכוּת", practice:"This week, lead something — even something small. Organize a meal, run a game, speak up for someone who needs a voice. Practice showing up as the version of yourself you've been building all seven weeks.", verse:"Your kingdom is a kingdom of all worlds. (Psalm 145:13)", mitzvah:"The mitzvah of Teshuvah — returning to your best self — is the ultimate act of Malchut. It is the declaration: I am not just what I have done. I am who I am becoming. This is the spirit we carry into Shavuot." },
+    quote:"מַלְכוּתְךָ מַלְכוּת כָּל עוֹלָמִים", translation:"Your kingdom is a kingdom of all worlds. (Psalm 145:13)",
+    learning:"Malchut means 'Kingship' — but not power over others. It is the Sefirah of Presence: showing up fully, leading with everything we have learned. We have journeyed through kindness, strength, balance, endurance, humility, and foundation. Now at Sinai we act. Shavuot is the harvest of 49 days of inner work.",
+    discussion:"Looking back at all seven Sefirot, which quality do you most want to carry with you? Why?",
+    game:{ title:"The Sinai Summit", type:"quiz",
+      instructions:"The final climb to Shavuot! Answer each question to reach the peak.",
+      questions:[
+        { q:"On which mountain did we receive the Torah?", a:"Sinai", options:["Zion","Sinai","Ararat"],
+          info:"Mount Sinai was chosen because it was a humble mountain — not the tallest or most impressive. Torah was given to those who make themselves humble enough to receive it." },
+        { q:"What food is traditional for Shavuot?", a:"Dairy", options:["Meat","Dairy","Fruit"],
+          info:"We eat dairy because Torah is compared to milk and honey. Also: when the Israelites received the Torah, they had no time to prepare kosher meat under the new laws, so they ate dairy." },
+        { q:"What does the word 'Shavuot' literally mean?", a:"Weeks", options:["Harvest","Weeks","Torah"],
+          info:"Shavuot means 'Weeks' — marking the end of the 7-week, 49-day Omer counting that began at Passover." }
+      ] }
+  }
+};
+
+
+/* ── HERITAGE OBSERVANCE DATA ── */
+const HERITAGE_DAYS = {
+  28: {
+    id: 28,
+    type: 'hazikaron',
+    day: 28,
+    title: 'Yom Hazikaron',
+    hebrewTitle: 'יוֹם הַזִּכָּרוֹן',
+    subtitle: 'Israel Memorial Day — Day 28 of the Omer',
+    tagline: 'The Silver Platter on which the State was given',
+    color: '#0038b8',
+    learning: {
+      headline: 'The Silver Platter & The Siren',
+      primary: 'On the eve of Israel\'s Declaration of Independence in 1948, the poet Natan Alterman published "The Silver Platter" (המגש הכסף) in the newspaper Davar. The poem was written in response to Chaim Weizmann\'s declaration that no state is given to a people on a silver platter — and depicted two young fighters, a man and a woman, who arise from the battlefield to deliver the state. One asks: "Who are you?" They answer only: "We are the silver platter on which the Jewish State was given to you."\n\nThe tradition of the memorial siren began in 1963. At 11:00 AM, all of Israel stops — cars halt on highways, pedestrians freeze on sidewalks — for two minutes of silence. The practice was modeled partly on Armistice Day traditions in Europe, but took on a distinctly Israeli character: the entire country participating as one body in collective grief. The National Library of Israel (nli.org.il) holds the original manuscript of Alterman\'s poem in its digital archive, alongside letters from fallen soldiers preserved from the 1948, 1967, and 1973 wars.',
+      source: 'National Library of Israel — Digital Collection, Natan Alterman Archive',
+      callout: 'As of 2024, 24,213 Israeli soldiers and terror victims are commemorated on Yom Hazikaron — a number that has grown every year since 1948.'
+    },
+    discussions: [
+      { q: 'The siren forces everyone — religious, secular, soldier, civilian — to stop at exactly the same moment. What does it mean when an entire nation pauses together in silence? How is collective memory different from personal memory?' },
+      { q: 'Alterman wrote that the state was not given freely — it was earned at tremendous cost. How does knowing the price paid for Israel\'s existence change the way you think about being Jewish today?' }
+    ],
+    challenge: {
+      title: 'Your Call to Action',
+      items: [
+        { icon: 'Mail', label: 'Write a Lone Soldier', text: 'There are approximately 7,000 lone soldiers in the IDF — young people serving far from their families. Visit lonesoldiercenter.com or sendmessage.idf.il to write a letter or send a care package to a soldier who has no family in Israel.' },
+        { icon: 'BookOpen', label: 'Read the Poem', text: 'Find and read "The Silver Platter" (המגש הכסף) by Natan Alterman in full. It is available in Hebrew and English translation in the NLI digital archive at nli.org.il. Discuss: why does Alterman never name the two fighters?' },
+        { icon: 'Search', label: 'Research a Figure', text: 'Visit the NLI digital collection (nli.org.il/en/discover/national-treasures) and search for one soldier\'s letter from the 1948 War of Independence. Read it and share one sentence with the class.' }
+      ]
+    }
+  },
+  29: {
+    id: 29,
+    type: 'haatzmaut',
+    day: 29,
+    title: "Yom Ha'atzmaut",
+    hebrewTitle: 'יוֹם הָעַצְמָאוּת',
+    subtitle: "Israel Independence Day — Day 29 of the Omer",
+    tagline: 'We hereby proclaim the establishment of the Jewish State',
+    color: '#0038b8',
+    learning: {
+      headline: 'Megillat Ha\'atzmaut & the Modern Miracle',
+      primary: 'On the afternoon of May 14, 1948 — the 5th of Iyar, 5708 — David Ben-Gurion stood in the Tel Aviv Museum (now Independence Hall) and read aloud the Declaration of Independence, Megillat Ha\'atzmaut (מגילת העצמאות). The declaration had been drafted by a committee over the preceding weeks. The original handwritten scroll — with its 37 signatories — is preserved by the National Library of Israel and has been fully digitized. Notably, the word "God" does not appear in the text; instead, the phrase used is "Tzur Yisrael" (צוּר יִשְׂרָאֵל) — the Rock of Israel — a deliberately inclusive phrase that could be interpreted secularly as "the strength of the Jewish people" or religiously as God.\n\nSince 1948, the modern State of Israel has become a global leader in agricultural technology (drip irrigation, developed by Netafim, now feeds hundreds of millions), medical technology (Given Imaging\'s PillCam revolutionized gastroenterology), and cybersecurity (Israel is second only to the United States in global cybersecurity exports). With a population of under 10 million, Israel produces more startup companies per capita than any nation on earth — a phenomenon called the "Startup Nation," documented by authors Dan Senor and Saul Singer.',
+      source: 'National Library of Israel — Megillat Ha\'atzmaut Digital Archive',
+      callout: '"We extend our hand to all neighboring states and their peoples in an offer of peace and good neighborliness." — Opening of the foreign policy section, Declaration of Independence, May 14, 1948.'
+    },
+    discussions: [
+      { q: 'The drafters of the Declaration deliberately avoided the word "God" in favor of "Tzur Yisrael." Why might a founding document choose ambiguity over clarity on religious questions? What does this tell us about who Israel was founded for?' },
+      { q: 'Israel became a tech and agricultural leader despite having almost no natural resources and constant security challenges. What does this achievement say about Jewish values like tikkun olam and l\'dor v\'dor (from generation to generation)?' }
+    ],
+    challenge: {
+      title: 'Your Call to Action',
+      items: [
+        { icon: 'Scroll', label: 'Read the Declaration', text: 'The full text of Megillat Ha\'atzmaut is available in English and Hebrew at the NLI (nli.org.il) and at the Knesset website. Read the paragraph that begins "The State of Israel will be open..." and discuss: what promises did Israel make to its citizens in 1948?' },
+        { icon: 'Lightbulb', label: 'Israeli Innovation Hunt', text: 'Research one Israeli innovation that affects your daily life — drip irrigation in your food, the PillCam used in hospitals, Waze on your phone (acquired by Google), or Mobileye in modern cars. Present a 60-second explanation to the class.' },
+        { icon: 'Link', label: 'Connect with Israel', text: 'Find a Jewish teen organization that connects diaspora Jews with Israeli peers — BBYO, USY, Hadassah Youth, or the Jewish Agency\'s Partnership2Gether program. Write down one way you could build a real connection with an Israeli peer your age.' }
+      ]
+    }
+  }
+};
+
+
+/* ── OMER BLESSINGS DATA ── */
+const OMER_BLESSING_GENERAL = {
+  hebrew: "בָּרוּךְ אַתָּה יְיָ אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם, אֲשֶׁר קִדְּשָׁנוּ בְּמִצְוֹתָיו וְצִוָּנוּ עַל סְפִירַת הָעֹמֶר.",
+  transliteration: "Baruch Atah Adonai, Eloheinu Melech ha-olam, asher kid'shanu b'mitzvotav v'tzivanu al sefirat ha-omer.",
+  translation: "Blessed are You, Eternal our God, Sovereign of the universe, who has sanctified us with Your commandments and commanded us concerning the counting of the Omer.",
+  note: "Recite each night after nightfall, before announcing the day count."
+};
+
+const OMER_DAY_COUNTS = {
+  1:  { he:"הַיּוֹם יוֹם אֶחָד לָעֹמֶר", en:"Today is one day of the Omer." },
+  2:  { he:"הַיּוֹם שְׁנֵי יָמִים לָעֹמֶר", en:"Today is two days of the Omer." },
+  3:  { he:"הַיּוֹם שְׁלֹשָׁה יָמִים לָעֹמֶר", en:"Today is three days of the Omer." },
+  4:  { he:"הַיּוֹם אַרְבָּעָה יָמִים לָעֹמֶר", en:"Today is four days of the Omer." },
+  5:  { he:"הַיּוֹם חֲמִשָּׁה יָמִים לָעֹמֶר", en:"Today is five days of the Omer." },
+  6:  { he:"הַיּוֹם שִׁשָּׁה יָמִים לָעֹמֶר", en:"Today is six days of the Omer." },
+  7:  { he:"הַיּוֹם שִׁבְעָה יָמִים, שֶׁהֵם שָׁבוּעַ אֶחָד לָעֹמֶר", en:"Today is seven days, which is one week of the Omer." },
+  8:  { he:"הַיּוֹם שְׁמוֹנָה יָמִים, שֶׁהֵם שָׁבוּעַ אֶחָד וְיוֹם אֶחָד לָעֹמֶר", en:"Today is eight days, which is one week and one day of the Omer." },
+  14: { he:"הַיּוֹם אַרְבָּעָה עָשָׂר יוֹם, שֶׁהֵם שְׁנֵי שָׁבוּעוֹת לָעֹמֶר", en:"Today is fourteen days, which is two weeks of the Omer." },
+  21: { he:"הַיּוֹם אֶחָד וְעֶשְׂרִים יוֹם, שֶׁהֵם שְׁלֹשָׁה שָׁבוּעוֹת לָעֹמֶר", en:"Today is twenty-one days, which is three weeks of the Omer." },
+  28: { he:"הַיּוֹם שְׁמוֹנָה וְעֶשְׂרִים יוֹם, שֶׁהֵם אַרְבָּעָה שָׁבוּעוֹת לָעֹמֶר", en:"Today is twenty-eight days, which is four weeks of the Omer." },
+  29: { he:"הַיּוֹם תִּשְׁעָה וְעֶשְׂרִים יוֹם, שֶׁהֵם אַרְבָּעָה שָׁבוּעוֹת וְיוֹם אֶחָד לָעֹמֶר", en:"Today is twenty-nine days, which is four weeks and one day of the Omer." },
+  33: { he:"הַיּוֹם שְׁלֹשָׁה וּשְׁלֹשִׁים יוֹם, שֶׁהֵם אַרְבָּעָה שָׁבוּעוֹת וַחֲמִשָּׁה יָמִים לָעֹמֶר", en:"Today is thirty-three days, which is four weeks and five days of the Omer." },
+  35: { he:"הַיּוֹם חֲמִשָּׁה וּשְׁלֹשִׁים יוֹם, שֶׁהֵם חֲמִשָּׁה שָׁבוּעוֹת לָעֹמֶר", en:"Today is thirty-five days, which is five weeks of the Omer." },
+  42: { he:"הַיּוֹם שְׁנַיִם וְאַרְבָּעִים יוֹם, שֶׁהֵם שִׁשָּׁה שָׁבוּעוֹת לָעֹמֶר", en:"Today is forty-two days, which is six weeks of the Omer." },
+  49: { he:"הַיּוֹם תִּשְׁעָה וְאַרְבָּעִים יוֹם, שֶׁהֵם שִׁבְעָה שָׁבוּעוֹת לָעֹמֶר", en:"Today is forty-nine days, which is seven weeks of the Omer." }
+};
+
+// Map each module week to the first day of that week for blessings
+const WEEK_TO_OMER_DAY = { 1:1, 2:8, 3:15, 4:22, 28:28, 29:29, 33:33, 5:36, 6:43, 7:47 };
+
+
+const ALL_49_OMER_COUNTS = [
+  { day:1, he:"הַיּוֹם אֶחָד יוֹם, שֶׁהֵם שָׁבוּעַ אֶחָד לָעֹמֶר", en:"Today is 1 day, which is 1 week of the Omer." },
+  { day:2, he:"הַיּוֹם שְׁנַיִם יָמִים לָעֹמֶר", en:"Today is 2 days of the Omer." },
+  { day:3, he:"הַיּוֹם שְׁלֹשָׁה יָמִים לָעֹמֶר", en:"Today is 3 days of the Omer." },
+  { day:4, he:"הַיּוֹם אַרְבָּעָה יָמִים לָעֹמֶר", en:"Today is 4 days of the Omer." },
+  { day:5, he:"הַיּוֹם חֲמִשָּׁה יָמִים לָעֹמֶר", en:"Today is 5 days of the Omer." },
+  { day:6, he:"הַיּוֹם שִׁשָּׁה יָמִים לָעֹמֶר", en:"Today is 6 days of the Omer." },
+  { day:7, he:"הַיּוֹם שִׁבְעָה יָמִים לָעֹמֶר", en:"Today is 7 days of the Omer." },
+  { day:8, he:"הַיּוֹם שְׁמוֹנָה יוֹם, שֶׁהֵם שְׁנֵי שָׁבוּעוֹת לָעֹמֶר", en:"Today is 8 days, which is 2 weeks of the Omer." },
+  { day:9, he:"הַיּוֹם תִּשְׁעָה יוֹם, שֶׁהֵם שָׁבוּעַ אֶחָד וְיוֹם אֶחָד לָעֹמֶר", en:"Today is 9 days, which is 1 week and 1 day of the Omer." },
+  { day:10, he:"הַיּוֹם עֲשָׂרָה יוֹם, שֶׁהֵם שָׁבוּעַ אֶחָד וְשְׁנֵי יָמִים לָעֹמֶר", en:"Today is 10 days, which is 1 week and 2 days of the Omer." },
+  { day:11, he:"הַיּוֹם אַחַד עָשָׂר יוֹם, שֶׁהֵם שָׁבוּעַ אֶחָד וְשְׁלֹשָׁה יָמִים לָעֹמֶר", en:"Today is 11 days, which is 1 week and 3 days of the Omer." },
+  { day:12, he:"הַיּוֹם שְׁנֵים עָשָׂר יוֹם, שֶׁהֵם שָׁבוּעַ אֶחָד וְאַרְבָּעָה יָמִים לָעֹמֶר", en:"Today is 12 days, which is 1 week and 4 days of the Omer." },
+  { day:13, he:"הַיּוֹם שְׁלֹשָׁה עָשָׂר יוֹם, שֶׁהֵם שָׁבוּעַ אֶחָד וְחֲמִשָּׁה יָמִים לָעֹמֶר", en:"Today is 13 days, which is 1 week and 5 days of the Omer." },
+  { day:14, he:"הַיּוֹם אַרְבָּעָה עָשָׂר יוֹם, שֶׁהֵם שָׁבוּעַ אֶחָד וְשִׁשָּׁה יָמִים לָעֹמֶר", en:"Today is 14 days, which is 1 week and 6 days of the Omer." },
+  { day:15, he:"הַיּוֹם חֲמִשָּׁה עָשָׂר יוֹם, שֶׁהֵם שְׁלֹשָׁה שָׁבוּעוֹת לָעֹמֶר", en:"Today is 15 days, which is 3 weeks of the Omer." },
+  { day:16, he:"הַיּוֹם שִׁשָּׁה עָשָׂר יוֹם, שֶׁהֵם שְׁנֵי שָׁבוּעוֹת וְיוֹם אֶחָד לָעֹמֶר", en:"Today is 16 days, which is 2 weeks and 1 day of the Omer." },
+  { day:17, he:"הַיּוֹם שִׁבְעָה עָשָׂר יוֹם, שֶׁהֵם שְׁנֵי שָׁבוּעוֹת וְשְׁנֵי יָמִים לָעֹמֶר", en:"Today is 17 days, which is 2 weeks and 2 days of the Omer." },
+  { day:18, he:"הַיּוֹם שְׁמוֹנָה עָשָׂר יוֹם, שֶׁהֵם שְׁנֵי שָׁבוּעוֹת וְשְׁלֹשָׁה יָמִים לָעֹמֶר", en:"Today is 18 days, which is 2 weeks and 3 days of the Omer." },
+  { day:19, he:"הַיּוֹם תִּשְׁעָה עָשָׂר יוֹם, שֶׁהֵם שְׁנֵי שָׁבוּעוֹת וְאַרְבָּעָה יָמִים לָעֹמֶר", en:"Today is 19 days, which is 2 weeks and 4 days of the Omer." },
+  { day:20, he:"הַיּוֹם עֶשְׂרִים יוֹם, שֶׁהֵם שְׁנֵי שָׁבוּעוֹת וְחֲמִשָּׁה יָמִים לָעֹמֶר", en:"Today is 20 days, which is 2 weeks and 5 days of the Omer." },
+  { day:21, he:"הַיּוֹם אֶחָד וְעֶשְׂרִים יוֹם, שֶׁהֵם שְׁנֵי שָׁבוּעוֹת וְשִׁשָּׁה יָמִים לָעֹמֶר", en:"Today is 21 days, which is 2 weeks and 6 days of the Omer." },
+  { day:22, he:"הַיּוֹם שְׁנַיִם וְעֶשְׂרִים יוֹם, שֶׁהֵם אַרְבָּעָה שָׁבוּעוֹת לָעֹמֶר", en:"Today is 22 days, which is 4 weeks of the Omer." },
+  { day:23, he:"הַיּוֹם שְׁלֹשָׁה וְעֶשְׂרִים יוֹם, שֶׁהֵם שְׁלֹשָׁה שָׁבוּעוֹת וְיוֹם אֶחָד לָעֹמֶר", en:"Today is 23 days, which is 3 weeks and 1 day of the Omer." },
+  { day:24, he:"הַיּוֹם אַרְבָּעָה וְעֶשְׂרִים יוֹם, שֶׁהֵם שְׁלֹשָׁה שָׁבוּעוֹת וְשְׁנֵי יָמִים לָעֹמֶר", en:"Today is 24 days, which is 3 weeks and 2 days of the Omer." },
+  { day:25, he:"הַיּוֹם חֲמִשָּׁה וְעֶשְׂרִים יוֹם, שֶׁהֵם שְׁלֹשָׁה שָׁבוּעוֹת וְשְׁלֹשָׁה יָמִים לָעֹמֶר", en:"Today is 25 days, which is 3 weeks and 3 days of the Omer." },
+  { day:26, he:"הַיּוֹם שִׁשָּׁה וְעֶשְׂרִים יוֹם, שֶׁהֵם שְׁלֹשָׁה שָׁבוּעוֹת וְאַרְבָּעָה יָמִים לָעֹמֶר", en:"Today is 26 days, which is 3 weeks and 4 days of the Omer." },
+  { day:27, he:"הַיּוֹם שִׁבְעָה וְעֶשְׂרִים יוֹם, שֶׁהֵם שְׁלֹשָׁה שָׁבוּעוֹת וְחֲמִשָּׁה יָמִים לָעֹמֶר", en:"Today is 27 days, which is 3 weeks and 5 days of the Omer." },
+  { day:28, he:"הַיּוֹם שְׁמוֹנָה וְעֶשְׂרִים יוֹם, שֶׁהֵם שְׁלֹשָׁה שָׁבוּעוֹת וְשִׁשָּׁה יָמִים לָעֹמֶר", en:"Today is 28 days, which is 3 weeks and 6 days of the Omer." },
+  { day:29, he:"הַיּוֹם תִּשְׁעָה וְעֶשְׂרִים יוֹם, שֶׁהֵם חֲמִשָּׁה שָׁבוּעוֹת לָעֹמֶר", en:"Today is 29 days, which is 5 weeks of the Omer." },
+  { day:30, he:"הַיּוֹם שְׁלֹשִׁים יוֹם, שֶׁהֵם אַרְבָּעָה שָׁבוּעוֹת וְיוֹם אֶחָד לָעֹמֶר", en:"Today is 30 days, which is 4 weeks and 1 day of the Omer." },
+  { day:31, he:"הַיּוֹם אֶחָד וּשְׁלֹשִׁים יוֹם, שֶׁהֵם אַרְבָּעָה שָׁבוּעוֹת וְשְׁנֵי יָמִים לָעֹמֶר", en:"Today is 31 days, which is 4 weeks and 2 days of the Omer." },
+  { day:32, he:"הַיּוֹם שְׁנַיִם וּשְׁלֹשִׁים יוֹם, שֶׁהֵם אַרְבָּעָה שָׁבוּעוֹת וְשְׁלֹשָׁה יָמִים לָעֹמֶר", en:"Today is 32 days, which is 4 weeks and 3 days of the Omer." },
+  { day:33, he:"הַיּוֹם שְׁלֹשָׁה וּשְׁלֹשִׁים יוֹם, שֶׁהֵם אַרְבָּעָה שָׁבוּעוֹת וְאַרְבָּעָה יָמִים לָעֹמֶר", en:"Today is 33 days, which is 4 weeks and 4 days of the Omer." },
+  { day:34, he:"הַיּוֹם אַרְבָּעָה וּשְׁלֹשִׁים יוֹם, שֶׁהֵם אַרְבָּעָה שָׁבוּעוֹת וְחֲמִשָּׁה יָמִים לָעֹמֶר", en:"Today is 34 days, which is 4 weeks and 5 days of the Omer." },
+  { day:35, he:"הַיּוֹם חֲמִשָּׁה וּשְׁלֹשִׁים יוֹם, שֶׁהֵם אַרְבָּעָה שָׁבוּעוֹת וְשִׁשָּׁה יָמִים לָעֹמֶר", en:"Today is 35 days, which is 4 weeks and 6 days of the Omer." },
+  { day:36, he:"הַיּוֹם שִׁשָּׁה וּשְׁלֹשִׁים יוֹם, שֶׁהֵם שִׁשָּׁה שָׁבוּעוֹת לָעֹמֶר", en:"Today is 36 days, which is 6 weeks of the Omer." },
+  { day:37, he:"הַיּוֹם שִׁבְעָה וּשְׁלֹשִׁים יוֹם, שֶׁהֵם חֲמִשָּׁה שָׁבוּעוֹת וְיוֹם אֶחָד לָעֹמֶר", en:"Today is 37 days, which is 5 weeks and 1 day of the Omer." },
+  { day:38, he:"הַיּוֹם שְׁמוֹנָה וּשְׁלֹשִׁים יוֹם, שֶׁהֵם חֲמִשָּׁה שָׁבוּעוֹת וְשְׁנֵי יָמִים לָעֹמֶר", en:"Today is 38 days, which is 5 weeks and 2 days of the Omer." },
+  { day:39, he:"הַיּוֹם תִּשְׁעָה וּשְׁלֹשִׁים יוֹם, שֶׁהֵם חֲמִשָּׁה שָׁבוּעוֹת וְשְׁלֹשָׁה יָמִים לָעֹמֶר", en:"Today is 39 days, which is 5 weeks and 3 days of the Omer." },
+  { day:40, he:"הַיּוֹם אַרְבָּעִים יוֹם, שֶׁהֵם חֲמִשָּׁה שָׁבוּעוֹת וְאַרְבָּעָה יָמִים לָעֹמֶר", en:"Today is 40 days, which is 5 weeks and 4 days of the Omer." },
+  { day:41, he:"הַיּוֹם אֶחָד וְאַרְבָּעִים יוֹם, שֶׁהֵם חֲמִשָּׁה שָׁבוּעוֹת וְחֲמִשָּׁה יָמִים לָעֹמֶר", en:"Today is 41 days, which is 5 weeks and 5 days of the Omer." },
+  { day:42, he:"הַיּוֹם שְׁנַיִם וְאַרְבָּעִים יוֹם, שֶׁהֵם חֲמִשָּׁה שָׁבוּעוֹת וְשִׁשָּׁה יָמִים לָעֹמֶר", en:"Today is 42 days, which is 5 weeks and 6 days of the Omer." },
+  { day:43, he:"הַיּוֹם שְׁלֹשָׁה וְאַרְבָּעִים יוֹם, שֶׁהֵם שִׁבְעָה שָׁבוּעוֹת לָעֹמֶר", en:"Today is 43 days, which is 7 weeks of the Omer." },
+  { day:44, he:"הַיּוֹם אַרְבָּעָה וְאַרְבָּעִים יוֹם, שֶׁהֵם שִׁשָּׁה שָׁבוּעוֹת וְיוֹם אֶחָד לָעֹמֶר", en:"Today is 44 days, which is 6 weeks and 1 day of the Omer." },
+  { day:45, he:"הַיּוֹם חֲמִשָּׁה וְאַרְבָּעִים יוֹם, שֶׁהֵם שִׁשָּׁה שָׁבוּעוֹת וְשְׁנֵי יָמִים לָעֹמֶר", en:"Today is 45 days, which is 6 weeks and 2 days of the Omer." },
+  { day:46, he:"הַיּוֹם שִׁשָּׁה וְאַרְבָּעִים יוֹם, שֶׁהֵם שִׁשָּׁה שָׁבוּעוֹת וְשְׁלֹשָׁה יָמִים לָעֹמֶר", en:"Today is 46 days, which is 6 weeks and 3 days of the Omer." },
+  { day:47, he:"הַיּוֹם שִׁבְעָה וְאַרְבָּעִים יוֹם, שֶׁהֵם שִׁשָּׁה שָׁבוּעוֹת וְאַרְבָּעָה יָמִים לָעֹמֶר", en:"Today is 47 days, which is 6 weeks and 4 days of the Omer." },
+  { day:48, he:"הַיּוֹם שְׁמוֹנָה וְאַרְבָּעִים יוֹם, שֶׁהֵם שִׁשָּׁה שָׁבוּעוֹת וְחֲמִשָּׁה יָמִים לָעֹמֶר", en:"Today is 48 days, which is 6 weeks and 5 days of the Omer." },
+  { day:49, he:"הַיּוֹם תִּשְׁעָה וְאַרְבָּעִים יוֹם, שֶׁהֵם שִׁשָּׁה שָׁבוּעוֹת וְשִׁשָּׁה יָמִים לָעֹמֶר", en:"Today is 49 days, which is 6 weeks and 6 days of the Omer." },
+];
+const HERITAGE_LS_KEY = 'harvest_path_heritage_completed';
+
+function getHeritageCompleted() {
+  try {
+    const raw = localStorage.getItem(HERITAGE_LS_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch { return {}; }
+}
+
+function setHeritageCompleted(day) {
+  try {
+    const cur = getHeritageCompleted();
+    cur[day] = { completedAt: new Date().toISOString() };
+    localStorage.setItem(HERITAGE_LS_KEY, JSON.stringify(cur));
+  } catch {}
+}
+
+
+/* ── MAGEN DAVID SVG ── */
+function MagenDavid({ size=32, color="white" }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 100 100" fill="none">
+      <polygon points="50,5 93,77 7,77" fill="none" stroke={color} strokeWidth="7"/>
+      <polygon points="50,95 7,23 93,23" fill="none" stroke={color} strokeWidth="7"/>
+    </svg>
+  );
+}
+
+/* ── HERITAGE MILESTONE CARD (replaces standard card in the week nav HUD) ── */
+function HeritageMilestoneCard({ day, onOpen, completed }) {
+  const data = HERITAGE_DAYS[day];
+  if (!data) return null;
+  const isHazikaron = day === 28;
+  return (
+    <div className="heritage-card" onClick={onOpen}
+      style={{borderRadius:'2rem',padding:'1.5rem 2rem',cursor:'pointer',color:'white',position:'relative',
+        boxShadow:'0 8px 32px rgba(0,56,184,0.5)',transition:'transform 0.2s',userSelect:'none'}}
+      onMouseEnter={e=>e.currentTarget.style.transform='translateY(-3px)'}
+      onMouseLeave={e=>e.currentTarget.style.transform='translateY(0)'}>
+      <div style={{display:'flex',alignItems:'flex-start',justifyContent:'space-between',gap:'1rem'}}>
+        <div style={{flex:1}}>
+          <div style={{display:'flex',alignItems:'center',gap:'0.75rem',marginBottom:'0.5rem'}}>
+            <MagenDavid size={28} color="white"/>
+            <span style={{fontSize:'0.7rem',fontWeight:900,textTransform:'uppercase',letterSpacing:'0.12em',opacity:0.7}}>
+              Day {day} · Special Observance
+            </span>
+          </div>
+          <h3 className="font-display" style={{fontSize:'2rem',letterSpacing:'0.05em',margin:'0 0 0.25rem',lineHeight:1}}>{data.title}</h3>
+          <p style={{fontSize:'1.1rem',fontWeight:900,margin:'0 0 0.75rem',direction:'rtl',opacity:0.9}}>{data.hebrewTitle}</p>
+          <p style={{fontSize:'0.9rem',fontWeight:700,opacity:0.75,margin:0,lineHeight:1.4,fontStyle:'italic'}}>"{data.tagline}"</p>
+        </div>
+        <div style={{flexShrink:0,display:'flex',flexDirection:'column',alignItems:'center',gap:'0.5rem'}}>
+          {completed
+            ? <div style={{background:'rgba(255,255,255,0.2)',borderRadius:'50%',width:'3rem',height:'3rem',display:'flex',alignItems:'center',justifyContent:'center'}}>
+                <Icons.Check size={28} color="white"/>
+              </div>
+            : <div style={{background:'rgba(255,255,255,0.15)',border:'2px solid rgba(255,255,255,0.4)',borderRadius:'0.75rem',padding:'0.4rem 0.8rem',fontSize:'0.8rem',fontWeight:900,textTransform:'uppercase',letterSpacing:'0.06em'}}>
+                Open Module
+              </div>
+          }
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── HERITAGE MODAL ── */
+function HeritageModal({ day, onClose, onComplete, alreadyCompleted }) {
+  const [tab, setTab] = useState('learning');
+  const [completed, setCompleted] = useState(alreadyCompleted);
+  const data = HERITAGE_DAYS[day];
+  if (!data) return null;
+
+  const handleComplete = () => {
+    setHeritageCompleted(day);
+    setCompleted(true);
+    onComplete(day);
+  };
+
+  const tabs = [
+    { id:'learning', label:'Learning', tabIcon:'Book' },
+    { id:'discussion', label:'Discussion', tabIcon:'Chat' },
+    { id:'challenge', label:'Challenge', tabIcon:'Trophy' },
+  ];
+
+  return (
+    <div className="heritage-modal-overlay">
+      <div className="heritage-modal font-body">
+
+        {/* Modal Header */}
+        <div style={{background:'#0038b8',padding:'1.5rem 2rem',display:'flex',alignItems:'center',justifyContent:'space-between',flexShrink:0}}>
+          <div style={{display:'flex',alignItems:'center',gap:'1rem'}}>
+            <MagenDavid size={44} color="white"/>
+            <div>
+              <p style={{margin:0,fontSize:'0.7rem',fontWeight:900,textTransform:'uppercase',letterSpacing:'0.12em',color:'rgba(255,255,255,0.65)'}}>Day {day} · Special Observance</p>
+              <h2 className="font-display" style={{margin:0,fontSize:'2.5rem',color:'white',letterSpacing:'0.05em',lineHeight:1}}>{data.title}</h2>
+              <p style={{margin:0,fontSize:'1.2rem',color:'rgba(255,255,255,0.8)',fontWeight:900,direction:'rtl'}}>{data.hebrewTitle}</p>
+            </div>
+          </div>
+          <button onClick={onClose} style={{background:'rgba(255,255,255,0.15)',border:'none',borderRadius:'0.75rem',padding:'0.6rem',cursor:'pointer',flexShrink:0}}>
+            <Icons.X size={24} color="white"/>
+          </button>
+        </div>
+
+        {/* Tab Bar */}
+        <div className="heritage-tab-bar" style={{flexShrink:0}}>
+          {tabs.map(t => (
+            <button key={t.id} onClick={()=>setTab(t.id)}
+              className={'heritage-tab' + (tab===t.id?' active':'')}
+              style={{display:'flex',alignItems:'center',justifyContent:'center',gap:'0.4rem'}}>
+              {t.tabIcon==='Book' && <Icons.Book size={16} color={tab===t.id?'white':'#94a3b8'}/>}
+              {t.tabIcon==='Chat' && <Icons.Chat size={16} color={tab===t.id?'white':'#94a3b8'}/>}
+              {t.tabIcon==='Trophy' && <Icons.Trophy size={16} color={tab===t.id?'white':'#94a3b8'}/>}
+              {t.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Tab Content */}
+        <div style={{overflowY:'auto',flex:1,padding:'2rem'}}>
+
+          {/* LEARNING TAB */}
+          {tab==='learning' && (
+            <div style={{display:'flex',flexDirection:'column',gap:'1.5rem'}}>
+              <h3 className="heritage-section-title">
+                <Icons.Book size={24} color="#0038b8"/> {data.learning.headline}
+              </h3>
+
+              {data.learning.primary.split('\n\n').map((para,i) => (
+                <p key={i} className="heritage-body-text" style={{margin:0}}>{para}</p>
+              ))}
+
+              <div className="heritage-callout">
+                <p><strong>Notable:</strong> {data.learning.callout}</p>
+              </div>
+
+              <div style={{background:'#f8faff',border:'2px solid #c7d9ff',borderRadius:'1rem',padding:'1rem 1.25rem',display:'flex',alignItems:'center',gap:'0.75rem'}}>
+                <Icons.Book size={20} color="#0038b8"/>
+                <p style={{margin:0,fontSize:'0.9rem',fontWeight:700,color:'#1e3a8a'}}>
+                  <strong>Primary Source:</strong> {data.learning.source}
+                </p>
+              </div>
+
+              {day===28 && (
+                <>
+                  <div style={{background:'#0038b8',color:'white',borderRadius:'1.25rem',padding:'1.5rem',fontStyle:'italic',lineHeight:1.7}}>
+                    <p style={{margin:'0 0 0.5rem',fontWeight:900,opacity:0.7,fontSize:'0.8rem',textTransform:'uppercase',letterSpacing:'0.1em'}}>Natan Alterman, "The Silver Platter" (1947)</p>
+                    <p style={{margin:0,fontSize:'1.05rem',fontWeight:700}}>"...And the two of them said: We are the silver platter on which the Jewish State was given to you."</p>
+                    <div style={{marginTop:'0.75rem',display:'flex',gap:'0.5rem',flexWrap:'wrap'}}>
+                      <a href="https://www.poetryfoundation.org/poems/49910/the-silver-platter" target="_blank" rel="noopener noreferrer" style={{display:'flex',alignItems:'center',gap:'0.3rem',color:'rgba(255,255,255,0.8)',fontWeight:700,fontSize:'0.85rem',textDecoration:'none',background:'rgba(255,255,255,0.15)',padding:'0.3rem 0.7rem',borderRadius:'0.5rem'}}>
+                        <Icons.ExternalLink size={12} color="rgba(255,255,255,0.8)"/> Read full poem (English)
+                      </a>
+                      <a href="https://www.nli.org.il/en/poems/NLI_POEM001004009000003/thumbnail" target="_blank" rel="noopener noreferrer" style={{display:'flex',alignItems:'center',gap:'0.3rem',color:'rgba(255,255,255,0.8)',fontWeight:700,fontSize:'0.85rem',textDecoration:'none',background:'rgba(255,255,255,0.15)',padding:'0.3rem 0.7rem',borderRadius:'0.5rem'}}>
+                        <Icons.ExternalLink size={12} color="rgba(255,255,255,0.8)"/> NLI Archive
+                      </a>
+                    </div>
+                  </div>
+                  <SirenPlayer/>
+                </>
+              )}
+              {day===29 && (
+                <div style={{background:'#0038b8',color:'white',borderRadius:'1.25rem',padding:'1.5rem',lineHeight:1.7}}>
+                  <p style={{margin:'0 0 0.5rem',fontWeight:900,opacity:0.7,fontSize:'0.8rem',textTransform:'uppercase',letterSpacing:'0.1em'}}>Megillat Ha'atzmaut — May 14, 1948</p>
+                  <p style={{margin:0,fontSize:'1.05rem',fontWeight:700,fontStyle:'italic'}}>"...Placing our trust in the Rock of Israel (Tzur Yisrael), we affix our signatures to this proclamation..."</p>
+                  <div style={{marginTop:'0.75rem',display:'flex',gap:'0.5rem',flexWrap:'wrap'}}>
+                    <a href="https://www.knesset.gov.il/docs/eng/megilat_eng.htm" target="_blank" rel="noopener noreferrer" style={{display:'flex',alignItems:'center',gap:'0.3rem',color:'rgba(255,255,255,0.8)',fontWeight:700,fontSize:'0.85rem',textDecoration:'none',background:'rgba(255,255,255,0.15)',padding:'0.3rem 0.7rem',borderRadius:'0.5rem'}}>
+                      <Icons.ExternalLink size={12} color="rgba(255,255,255,0.8)"/> Full text (English) — Knesset
+                    </a>
+                    <a href="https://www.nli.org.il/en/articles/the-declaration-of-independence" target="_blank" rel="noopener noreferrer" style={{display:'flex',alignItems:'center',gap:'0.3rem',color:'rgba(255,255,255,0.8)',fontWeight:700,fontSize:'0.85rem',textDecoration:'none',background:'rgba(255,255,255,0.15)',padding:'0.3rem 0.7rem',borderRadius:'0.5rem'}}>
+                      <Icons.ExternalLink size={12} color="rgba(255,255,255,0.8)"/> NLI Archive — Original scroll
+                    </a>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* DISCUSSION TAB */}
+          {tab==='discussion' && (
+            <div style={{display:'flex',flexDirection:'column',gap:'1.5rem'}}>
+              <h3 className="heritage-section-title">
+                <Icons.Chat size={24} color="#0038b8"/> Discussion Questions
+              </h3>
+              <p style={{fontSize:'1rem',color:'#64748b',fontWeight:700,fontStyle:'italic',margin:0}}>
+                Use these prompts to connect Israel's history to your students' Jewish identity today.
+              </p>
+              {data.discussions.map((d,i) => (
+                <div key={i} style={{background:'#f0f5ff',border:'4px solid #0038b8',borderRadius:'1.5rem',padding:'1.5rem'}}>
+                  <div style={{display:'flex',alignItems:'flex-start',gap:'1rem'}}>
+                    <div style={{background:'#0038b8',color:'white',borderRadius:'50%',width:'2.2rem',height:'2.2rem',display:'flex',alignItems:'center',justifyContent:'center',fontWeight:900,fontSize:'1.1rem',flexShrink:0}}>
+                      {i+1}
+                    </div>
+                    <p style={{fontSize:'1.2rem',fontWeight:900,color:'#1e3a8a',lineHeight:1.5,margin:0,fontStyle:'italic'}}>"{d.q}"</p>
+                  </div>
+                </div>
+              ))}
+              <div style={{background:'#f8faff',borderRadius:'1rem',padding:'1rem 1.25rem',display:'flex',alignItems:'center',gap:'0.75rem',border:'2px solid #c7d9ff'}}>
+                <Icons.Users size={22} color="#0038b8"/>
+                <span style={{fontWeight:900,fontSize:'0.9rem',textTransform:'uppercase',letterSpacing:'0.08em',color:'#1e3a8a'}}>Small Group or Full Class Discussion — 10–15 min</span>
+              </div>
+            </div>
+          )}
+
+          {/* CHALLENGE TAB */}
+          {tab==='challenge' && (
+            <div style={{display:'flex',flexDirection:'column',gap:'1.5rem'}}>
+              <h3 className="heritage-section-title">
+                <Icons.Trophy size={24} color="#0038b8"/> {data.challenge.title}
+              </h3>
+              <p style={{fontSize:'1rem',color:'#64748b',fontWeight:700,fontStyle:'italic',margin:0}}>
+                Choose one action to take as a class. Each connects your students directly to Israel's past or present.
+              </p>
+              {data.challenge.items.map((item,i) => (
+                <div key={i} className="heritage-challenge-card">
+                  <h4 style={{display:'flex',alignItems:'center',gap:'0.5rem'}}>
+                    {item.icon==='Mail'&&<Icons.Mail size={18} color="rgba(255,255,255,0.8)"/>}
+                    {item.icon==='BookOpen'&&<Icons.BookOpen size={18} color="rgba(255,255,255,0.8)"/>}
+                    {item.icon==='Search'&&<Icons.Search size={18} color="rgba(255,255,255,0.8)"/>}
+                    {item.icon==='Scroll'&&<Icons.Scroll size={18} color="rgba(255,255,255,0.8)"/>}
+                    {item.icon==='Lightbulb'&&<Icons.Lightbulb size={18} color="rgba(255,255,255,0.8)"/>}
+                    {item.icon==='Link'&&<Icons.Link size={18} color="rgba(255,255,255,0.8)"/>}
+                    {item.label}
+                  </h4>
+                  <p>{item.text}</p>
+                </div>
+              ))}
+
+              <div style={{marginTop:'0.5rem'}}>
+                <button
+                  onClick={completed ? undefined : handleComplete}
+                  className={'heritage-complete-btn' + (completed?' completed':'')}>
+                  {completed
+                    ? <><Icons.Check size={24} color="white"/> MODULE COMPLETED!</>
+                    : <><MagenDavid size={24} color="white"/> MARK MODULE COMPLETE</>
+                  }
+                </button>
+                {completed && (
+                  <p style={{textAlign:'center',fontSize:'0.85rem',color:'#15803d',fontWeight:700,marginTop:'0.5rem'}}>
+                    Completed — this is saved in your browser.
+                  </p>
+                )}
+              </div>
+            </div>
+          )}
+
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+/* ── OMER BLESSING PANEL ── */
+function BlessingPanel({ weekId, isHeritage }) {
+  const [open, setOpen] = React.useState(false);
+  const dayNum = WEEK_TO_OMER_DAY[weekId] || 1;
+  const dayCount = OMER_DAY_COUNTS[dayNum] || OMER_DAY_COUNTS[1];
+  const accent = isHeritage ? '#0038b8' : '#1A365D';
+  return (
+    <div style={{marginTop:'1.5rem'}}>
+      <button onClick={()=>setOpen(o=>!o)}
+        style={{display:'flex',alignItems:'center',gap:'0.5rem',background:open?accent:'white',color:open?'white':accent,border:`3px solid ${accent}`,borderRadius:'1rem',padding:'0.6rem 1.2rem',fontWeight:900,cursor:'pointer',fontSize:'0.95rem',transition:'all 0.15s'}}>
+        <Icons.Blessing size={18} color={open?'white':accent}/>
+        {open ? 'Hide Omer Blessing' : 'Show Omer Blessing for This Day'}
+      </button>
+      {open && (
+        <div style={{marginTop:'1rem',background:'#FDFBF7',border:`3px solid ${accent}`,borderRadius:'1.5rem',padding:'1.5rem',display:'flex',flexDirection:'column',gap:'1rem'}}>
+          <div style={{textAlign:'center',background:accent,borderRadius:'1rem',padding:'1.25rem'}}>
+            <p style={{color:'white',fontSize:'0.7rem',fontWeight:900,textTransform:'uppercase',letterSpacing:'0.1em',margin:'0 0 0.5rem',opacity:0.7}}>The Blessing (recited after nightfall)</p>
+            <p style={{color:'white',fontSize:'1.4rem',fontWeight:900,lineHeight:1.7,direction:'rtl',margin:0}}>{OMER_BLESSING_GENERAL.hebrew}</p>
+          </div>
+          <div style={{background:'#f8fafc',borderRadius:'1rem',padding:'1rem'}}>
+            <p style={{fontSize:'0.75rem',fontWeight:900,color:'#94a3b8',textTransform:'uppercase',letterSpacing:'0.1em',margin:'0 0 0.3rem'}}>Transliteration</p>
+            <p style={{fontSize:'1rem',fontWeight:'bold',color:'#334155',fontStyle:'italic',margin:0}}>{OMER_BLESSING_GENERAL.transliteration}</p>
+          </div>
+          <div>
+            <p style={{fontSize:'0.75rem',fontWeight:900,color:'#94a3b8',textTransform:'uppercase',letterSpacing:'0.1em',margin:'0 0 0.3rem'}}>Translation</p>
+            <p style={{fontSize:'1rem',fontWeight:'bold',color:'#334155',margin:0}}>{OMER_BLESSING_GENERAL.translation}</p>
+          </div>
+          <div style={{borderTop:`2px solid ${accent}`,paddingTop:'1rem'}}>
+            <p style={{fontSize:'0.75rem',fontWeight:900,color:'#94a3b8',textTransform:'uppercase',letterSpacing:'0.1em',margin:'0 0 0.4rem'}}>Day Count for Day {dayNum}</p>
+            <p style={{fontSize:'1.2rem',fontWeight:900,color:accent,direction:'rtl',margin:'0 0 0.3rem'}}>{dayCount.he}</p>
+            <p style={{fontSize:'1rem',fontWeight:'bold',color:'#475569',margin:0}}>{dayCount.en}</p>
+          </div>
+          <p style={{fontSize:'0.8rem',color:'#94a3b8',fontStyle:'italic',margin:0}}>{OMER_BLESSING_GENERAL.note}</p>
+          <a href="https://www.myjewishlearning.com/article/sefirat-ha-omer/" target="_blank" rel="noopener noreferrer"
+            style={{display:'flex',alignItems:'center',gap:'0.4rem',color:accent,fontWeight:900,fontSize:'0.85rem',textDecoration:'none'}}>
+            <Icons.ExternalLink size={14} color={accent}/> Learn more about Sefirat HaOmer at MyJewishLearning
+          </a>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ── MIDDAH PANEL ── */
+function MiddahPanel({ middah, accent }) {
+  const [open, setOpen] = React.useState(false);
+  if (!middah) return null;
+  const c = accent || '#1A365D';
+  return (
+    <div style={{marginTop:'1.5rem',border:`3px solid ${c}`,borderRadius:'1.5rem',overflow:'hidden'}}>
+      <button onClick={()=>setOpen(o=>!o)}
+        style={{width:'100%',display:'flex',alignItems:'center',justifyContent:'space-between',padding:'1rem 1.5rem',background:open?c:'white',color:open?'white':c,border:'none',cursor:'pointer',fontWeight:900,fontSize:'1rem',transition:'all 0.15s'}}>
+        <div style={{display:'flex',alignItems:'center',gap:'0.6rem'}}>
+          <Icons.Heart size={20} color={open?'white':c}/>
+          <span>This Week's Middah: {middah.hebrewName} — {middah.name}</span>
+        </div>
+        <Icons.ChevronRight size={18} color={open?'white':c} style={{transform:open?'rotate(90deg)':'rotate(0)',transition:'transform 0.2s'}}/>
+      </button>
+      {open && (
+        <div style={{padding:'1.5rem',display:'flex',flexDirection:'column',gap:'1rem',background:'#FDFBF7'}}>
+          <div style={{background:c,borderRadius:'1rem',padding:'1rem',color:'white',fontStyle:'italic',fontSize:'1rem',fontWeight:700,lineHeight:1.6}}>
+            <p style={{margin:'0 0 0.3rem',opacity:0.7,fontSize:'0.75rem',fontWeight:900,textTransform:'uppercase',letterSpacing:'0.1em'}}>Verse</p>
+            <p style={{margin:0}}>{middah.verse}</p>
+          </div>
+          <div>
+            <p style={{fontWeight:900,color:c,fontSize:'0.85rem',textTransform:'uppercase',letterSpacing:'0.08em',margin:'0 0 0.4rem'}}>This Week's Practice</p>
+            <p style={{fontSize:'1rem',fontWeight:'bold',color:'#334155',lineHeight:1.6,margin:0}}>{middah.practice}</p>
+          </div>
+          <div style={{background:'#f0f5ff',borderLeft:`4px solid ${c}`,borderRadius:'0 0.75rem 0.75rem 0',padding:'1rem 1.25rem'}}>
+            <p style={{fontWeight:900,color:c,fontSize:'0.85rem',textTransform:'uppercase',letterSpacing:'0.08em',margin:'0 0 0.4rem'}}>The Mitzvah Connection</p>
+            <p style={{fontSize:'0.95rem',fontWeight:700,color:'#1e3a8a',lineHeight:1.6,margin:0}}>{middah.mitzvah}</p>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ── SESSION OPENER — Mitzvot & Middot check-in ── */
+function SessionOpener({ weekTitle, weekId }) {
+  const [open, setOpen] = React.useState(false);
+  const isW1 = weekId === 1;
+  return (
+    <div style={{marginBottom:'1.5rem',background:'#fefce8',border:'3px solid #D4AF37',borderRadius:'1.5rem',overflow:'hidden'}}>
+      <button onClick={()=>setOpen(o=>!o)}
+        style={{width:'100%',display:'flex',alignItems:'center',justifyContent:'space-between',padding:'1rem 1.5rem',background:'transparent',border:'none',cursor:'pointer',fontWeight:900,fontSize:'1rem',color:'#92400e'}}>
+        <div style={{display:'flex',alignItems:'center',gap:'0.6rem'}}>
+          <Icons.Hands size={20} color="#92400e"/>
+          <span>{isW1 ? 'Session Opener: What is a Mitzvah?' : 'Session Opener: Mitzvot & Middot Check-In'}</span>
+        </div>
+        <Icons.ChevronRight size={18} color="#92400e"/>
+      </button>
+      {open && (
+        <div style={{padding:'1.5rem',borderTop:'2px solid #fde68a',display:'flex',flexDirection:'column',gap:'1.25rem'}}>
+          {isW1 ? (
+            <>
+              <p style={{fontSize:'1rem',fontWeight:900,color:'#92400e',margin:0}}>Before we begin the Omer journey, let's understand what we're doing and why.</p>
+              <div style={{display:'flex',flexDirection:'column',gap:'0.75rem'}}>
+                {[
+                  { q:"What is a mitzvah? Is it just a good deed, or something more?", note:"Guide students: Mitzvah means 'commandment' — something we are called to do because it connects us to God and to our community, not just because it feels good." },
+                  { q:"If you had to do ONE mitzvah every single day for 49 days, what would you choose? Why?", note:"This sets up the Omer as a daily practice. Students should think about sustainability, not just impressiveness." },
+                  { q:"What's the difference between doing something because you have to, and doing it because you want to?", note:"This is the heart of the Omer: we count up, not down — moving toward something, not just completing an obligation." }
+                ].map((item, i) => (
+                  <div key={i} style={{background:'white',border:'2px solid #fde68a',borderRadius:'1rem',padding:'1rem'}}>
+                    <p style={{fontWeight:900,color:'#1A365D',fontSize:'1rem',margin:'0 0 0.4rem',fontStyle:'italic'}}>"{item.q}"</p>
+                    <p style={{fontSize:'0.85rem',color:'#64748b',fontWeight:700,margin:0}}>Teacher note: {item.note}</p>
+                  </div>
+                ))}
+              </div>
+              <a href="https://www.myjewishlearning.com/article/613-commandments/" target="_blank" rel="noopener noreferrer"
+                style={{display:'flex',alignItems:'center',gap:'0.4rem',color:'#92400e',fontWeight:900,fontSize:'0.85rem',textDecoration:'none'}}>
+                <Icons.ExternalLink size={14} color="#92400e"/> The 613 Mitzvot explained at MyJewishLearning
+              </a>
+            </>
+          ) : (
+            <>
+              <p style={{fontSize:'1rem',fontWeight:700,color:'#92400e',margin:0,fontStyle:'italic'}}>Begin every session with this 3-minute ritual. It builds accountability and community.</p>
+              <div style={{display:'flex',flexDirection:'column',gap:'0.75rem'}}>
+                {[
+                  "Raise your hand if you performed a mitzvah since our last session. What did you do? (Pair-share, 1 minute)",
+                  "Did anyone practice our Middah from last week? What happened — what did you notice?",
+                  "Is there a mitzvah or middah you tried and it was HARD? What got in the way?"
+                ].map((q, i) => (
+                  <div key={i} style={{background:'white',border:'2px solid #fde68a',borderRadius:'1rem',padding:'0.85rem 1rem',display:'flex',gap:'0.75rem',alignItems:'flex-start'}}>
+                    <div style={{background:'#D4AF37',color:'white',borderRadius:'50%',width:'1.6rem',height:'1.6rem',display:'flex',alignItems:'center',justifyContent:'center',fontWeight:900,fontSize:'0.85rem',flexShrink:0}}>{i+1}</div>
+                    <p style={{fontWeight:900,color:'#1A365D',fontSize:'0.95rem',margin:0,fontStyle:'italic'}}>"{q}"</p>
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+
+/* ── MORE RESOURCES PANEL ── */
+const MORE_RESOURCES = {
+  1: [
+    { label:"Chesed in Jewish Law — My Jewish Learning", url:"https://www.myjewishlearning.com/article/gemilut-hasadim-acts-of-loving-kindness/", source:"myjewishlearning" },
+    { label:"Chesed in the Sefaria Library — Leviticus 19", url:"https://www.sefaria.org/Leviticus.19.18?lang=bi", source:"sefaria" },
+    { label:"Counting the Omer: Week 1 Chesed — The iCenter", url:"https://theicenter.org/", source:"icenter" },
+    { label:"BimBam: What is Chesed? (Video)", url:"https://youtu.be/BKxXqkxg_Xg", source:"bimbam" },
+  ],
+  2: [
+    { label:"Gevurah & Self-Discipline — Chabad.org", url:"https://www.chabad.org/library/article_cdo/aid/979460/jewish/Gevurah.htm", source:"chabad" },
+    { label:"Pirkei Avot 4:1 — Sefaria", url:"https://www.sefaria.org/Pirkei_Avot.4.1?lang=bi", source:"sefaria" },
+    { label:"Counting the Omer Overview — My Jewish Learning", url:"https://www.myjewishlearning.com/article/counting-the-omer/", source:"myjewishlearning" },
+  ],
+  3: [
+    { label:"Tiferet & Compassion — Chabad.org", url:"https://www.chabad.org/library/article_cdo/aid/979461/jewish/Tiferet.htm", source:"chabad" },
+    { label:"Psalm 89 — Sefaria", url:"https://www.sefaria.org/Psalms.89?lang=bi", source:"sefaria" },
+    { label:"The Sefirot Explained — My Jewish Learning", url:"https://www.myjewishlearning.com/article/the-kabbalistic-tradition/", source:"myjewishlearning" },
+  ],
+  4: [
+    { label:"Netzach — Chabad.org", url:"https://www.chabad.org/library/article_cdo/aid/979462/jewish/Netzach.htm", source:"chabad" },
+    { label:"1 Samuel 15:29 — Sefaria", url:"https://www.sefaria.org/I_Samuel.15.29?lang=bi", source:"sefaria" },
+    { label:"The Omer Counting Practice — My Jewish Learning", url:"https://www.myjewishlearning.com/article/counting-the-omer/", source:"myjewishlearning" },
+  ],
+  28: [
+    { label:"Yom Hazikaron at the National Library of Israel", url:"https://www.nli.org.il/en/a-national-day-of-mourning-yom-hazikaron", source:"nli" },
+    { label:"The Silver Platter — Natan Alterman (Sefaria)", url:"https://www.sefaria.org/", source:"sefaria" },
+    { label:"Yom Hazikaron Guide — My Jewish Learning", url:"https://www.myjewishlearning.com/article/yom-hazikaron/", source:"myjewishlearning" },
+    { label:"The iCenter: Teaching Yom Hazikaron", url:"https://theicenter.org/resource/yom-hazikaron/", source:"icenter" },
+    { label:"Lone Soldier Center — Write a Letter", url:"https://www.lonesoldiercenter.com/", source:"external" },
+  ],
+  29: [
+    { label:"Megillat Ha'atzmaut at the National Library of Israel", url:"https://www.nli.org.il/en/articles/the-declaration-of-independence", source:"nli" },
+    { label:"Declaration of Independence full text (Knesset)", url:"https://www.knesset.gov.il/docs/eng/megilat_eng.htm", source:"external" },
+    { label:"Yom Ha'atzmaut Guide — My Jewish Learning", url:"https://www.myjewishlearning.com/article/yom-haatzmaut-israels-independence-day/", source:"myjewishlearning" },
+    { label:"The iCenter: Teaching Yom Ha'atzmaut", url:"https://theicenter.org/resource/yom-haatzmaut/", source:"icenter" },
+    { label:"Startup Nation: Israel and Innovation", url:"https://www.myjewishlearning.com/article/innovation-and-israel/", source:"myjewishlearning" },
+  ],
+  33: [
+    { label:"Rashbi & The Zohar — Chabad.org", url:"https://www.chabad.org/library/article_cdo/aid/332564/jewish/Who-Was-Rabbi-Shimon-bar-Yochai.htm", source:"chabad" },
+    { label:"The Zohar — Sefaria", url:"https://www.sefaria.org/Zohar.1.1a.1?lang=bi", source:"sefaria" },
+    { label:"Lag BaOmer Guide — My Jewish Learning", url:"https://www.myjewishlearning.com/article/lag-baomer/", source:"myjewishlearning" },
+    { label:"BimBam: Lag BaOmer Explained (Video)", url:"https://www.youtube.com/watch?v=_UxqP6DZDHU", source:"bimbam" },
+  ],
+  5: [
+    { label:"Hod & Gratitude — Chabad.org", url:"https://www.chabad.org/library/article_cdo/aid/979463/jewish/Hod.htm", source:"chabad" },
+    { label:"Modeh Ani Prayer — Sefaria", url:"https://www.sefaria.org/Modeh_Ani", source:"sefaria" },
+    { label:"Hakarat HaTov — My Jewish Learning", url:"https://www.myjewishlearning.com/article/gratitude-in-judaism/", source:"myjewishlearning" },
+  ],
+  6: [
+    { label:"Yesod — Chabad.org", url:"https://www.chabad.org/library/article_cdo/aid/979464/jewish/Yesod.htm", source:"chabad" },
+    { label:"Proverbs 10:25 — Sefaria", url:"https://www.sefaria.org/Proverbs.10.25?lang=bi", source:"sefaria" },
+    { label:"Jewish Values in Relationships — My Jewish Learning", url:"https://www.myjewishlearning.com/article/jewish-values/", source:"myjewishlearning" },
+  ],
+  7: [
+    { label:"Malchut — Chabad.org", url:"https://www.chabad.org/library/article_cdo/aid/979465/jewish/Malchut.htm", source:"chabad" },
+    { label:"Psalm 145 — Sefaria", url:"https://www.sefaria.org/Psalms.145?lang=bi", source:"sefaria" },
+    { label:"Shavuot Guide — My Jewish Learning", url:"https://www.myjewishlearning.com/article/shavuot/", source:"myjewishlearning" },
+    { label:"The iCenter: Teaching Shavuot and Israel", url:"https://theicenter.org/", source:"icenter" },
+  ]
+};
+
+const SOURCE_COLORS = {
+  sefaria: '#004E5F',
+  chabad: '#8B0000',
+  myjewishlearning: '#1A365D',
+  nli: '#0038b8',
+  icenter: '#2d6a4f',
+  bimbam: '#7c3aed',
+  external: '#374151',
+};
+
+function MoreResourcesPanel({ weekId, accent }) {
+  const [open, setOpen] = React.useState(false);
+  const resources = MORE_RESOURCES[weekId] || [];
+  if (!resources.length) return null;
+  const c = accent || '#1A365D';
+  return (
+    <div style={{marginTop:'1.5rem',border:`2px dashed ${c}`,borderRadius:'1.5rem',overflow:'hidden'}}>
+      <button onClick={()=>setOpen(o=>!o)}
+        style={{width:'100%',display:'flex',alignItems:'center',justifyContent:'space-between',padding:'1rem 1.5rem',background:open?c:'transparent',color:open?'white':c,border:'none',cursor:'pointer',fontWeight:900,fontSize:'1rem',transition:'all 0.15s'}}>
+        <div style={{display:'flex',alignItems:'center',gap:'0.6rem'}}>
+          <Icons.MoreHoriz size={20} color={open?'white':c}/>
+          <span>More Resources ({resources.length} sources)</span>
+        </div>
+        <Icons.ChevronRight size={18} color={open?'white':c}/>
+      </button>
+      {open && (
+        <div style={{padding:'1.25rem',display:'flex',flexDirection:'column',gap:'0.6rem',background:'#f8fafc'}}>
+          <p style={{fontSize:'0.8rem',fontWeight:900,color:'#94a3b8',textTransform:'uppercase',letterSpacing:'0.1em',margin:'0 0 0.5rem'}}>
+            All links open in a new tab — no need to leave this page
+          </p>
+          {resources.map((r,i) => {
+            const sc = SOURCE_COLORS[r.source] || '#374151';
+            return (
+              <a key={i} href={r.url} target="_blank" rel="noopener noreferrer"
+                style={{display:'flex',alignItems:'center',gap:'0.75rem',padding:'0.75rem 1rem',background:'white',border:`2px solid ${sc}`,borderRadius:'0.75rem',textDecoration:'none',transition:'all 0.15s'}}>
+                <Icons.ExternalLink size={16} color={sc}/>
+                <span style={{fontWeight:700,color:sc,fontSize:'0.95rem',flex:1}}>{r.label}</span>
+                <span style={{fontSize:'0.7rem',fontWeight:900,textTransform:'uppercase',letterSpacing:'0.06em',color:'white',background:sc,padding:'0.2rem 0.5rem',borderRadius:'0.4rem'}}>{r.source}</span>
+              </a>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
+
+/* ── YOM HAZIKARON SIREN PLAYER ── */
+function SirenPlayer() {
+  const [phase, setPhase] = React.useState('idle'); // idle | playing | done
+  const [elapsed, setElapsed] = React.useState(0);
+  const audioCtxRef = React.useRef(null);
+  const gainRef = React.useRef(null);
+  const oscRef = React.useRef(null);
+  const intervalRef = React.useRef(null);
+  const DURATION = 120;
+
+  const startSiren = () => {
+    try {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      const ctx = new AudioCtx();
+      audioCtxRef.current = ctx;
+      const gain = ctx.createGain();
+      gain.connect(ctx.destination);
+      gain.gain.setValueAtTime(0.001, ctx.currentTime);
+      gain.gain.linearRampToValueAtTime(0.4, ctx.currentTime + 0.5);
+      gainRef.current = gain;
+      const osc = ctx.createOscillator();
+      osc.connect(gain);
+      osc.type = 'sawtooth';
+      const now = ctx.currentTime;
+      // Siren sweep: 300hz → 600hz over 3s, then 600→300 over 3s, repeat
+      const sweepDuration = 3.0;
+      for (let i = 0; i < 40; i++) {
+        const t = now + i * sweepDuration;
+        osc.frequency.setValueAtTime(300, t);
+        osc.frequency.linearRampToValueAtTime(600, t + sweepDuration/2);
+        osc.frequency.linearRampToValueAtTime(300, t + sweepDuration);
+      }
+      osc.start(now);
+      osc.stop(now + DURATION + 1);
+      oscRef.current = osc;
+      osc.onended = () => {
+        setPhase('done');
+        clearInterval(intervalRef.current);
+      };
+      setPhase('playing');
+      setElapsed(0);
+      intervalRef.current = setInterval(() => {
+        setElapsed(e => {
+          if (e >= DURATION - 1) {
+            clearInterval(intervalRef.current);
+            gain.gain.linearRampToValueAtTime(0.001, ctx.currentTime + 1);
+            return DURATION;
+          }
+          return e + 1;
+        });
+      }, 1000);
+    } catch(e) {
+      alert('Audio not supported in this browser. Please use Chrome or Firefox.');
+    }
+  };
+
+  const stopSiren = () => {
+    clearInterval(intervalRef.current);
+    if (oscRef.current) try { oscRef.current.stop(); } catch(e) {}
+    if (gainRef.current) try { gainRef.current.gain.linearRampToValueAtTime(0.001, audioCtxRef.current.currentTime + 0.3); } catch(e){}
+    if (audioCtxRef.current) setTimeout(()=>{ try { audioCtxRef.current.close(); } catch(e){} }, 500);
+    setPhase('idle'); setElapsed(0);
+  };
+
+  const remaining = DURATION - elapsed;
+  const fmtT = s => `${Math.floor(s/60)}:${(s%60).toString().padStart(2,'0')}`;
+
+  return (
+    <div style={{background:'#0038b8',borderRadius:'1.5rem',padding:'1.5rem',color:'white',marginTop:'1.5rem'}}>
+      <div style={{display:'flex',alignItems:'center',gap:'0.75rem',marginBottom:'1rem'}}>
+        <Icons.Sound size={26} color="white"/>
+        <div>
+          <p style={{margin:0,fontWeight:900,fontSize:'1.1rem'}}>Two-Minute Siren</p>
+          <p style={{margin:0,fontSize:'0.8rem',opacity:0.75}}>The memorial siren that stops all of Israel</p>
+        </div>
+      </div>
+      {phase === 'idle' && (
+        <div style={{display:'flex',flexDirection:'column',gap:'0.75rem'}}>
+          <p style={{margin:0,fontSize:'0.9rem',lineHeight:1.6,opacity:0.85}}>At 11:00 AM on Yom Hazikaron, a two-minute siren sounds across Israel. All traffic stops. People stand in silence wherever they are. Click below to experience the siren with your class.</p>
+          <button onClick={startSiren}
+            style={{background:'white',color:'#0038b8',border:'none',borderRadius:'1rem',padding:'0.85rem 1.5rem',fontWeight:900,fontSize:'1.1rem',cursor:'pointer',display:'flex',alignItems:'center',gap:'0.6rem',justifyContent:'center'}}>
+            <Icons.Sound size={20} color="#0038b8"/> Sound the Siren (2 minutes)
+          </button>
+        </div>
+      )}
+      {phase === 'playing' && (
+        <div style={{textAlign:'center',display:'flex',flexDirection:'column',gap:'1rem',alignItems:'center'}}>
+          <div style={{width:'6rem',height:'6rem',borderRadius:'50%',background:'rgba(255,255,255,0.15)',border:'4px solid white',display:'flex',alignItems:'center',justifyContent:'center',animation:'pulse 1s infinite'}}>
+            <span style={{fontSize:'2rem',fontWeight:900}}>{fmtT(remaining)}</span>
+          </div>
+          <p style={{margin:0,fontWeight:900,fontSize:'1.1rem',opacity:0.9}}>Stand in silence. Remember.</p>
+          <button onClick={stopSiren}
+            style={{background:'rgba(255,255,255,0.2)',color:'white',border:'2px solid rgba(255,255,255,0.5)',borderRadius:'0.75rem',padding:'0.5rem 1.25rem',fontWeight:900,cursor:'pointer',fontSize:'0.9rem'}}>
+            End Siren
+          </button>
+        </div>
+      )}
+      {phase === 'done' && (
+        <div style={{textAlign:'center',display:'flex',flexDirection:'column',gap:'0.75rem'}}>
+          <p style={{margin:0,fontWeight:900,fontSize:'1.1rem'}}>The siren has ended.</p>
+          <p style={{margin:0,fontSize:'0.9rem',opacity:0.85,fontStyle:'italic'}}>"We will not forget. We will not remain silent."</p>
+          <button onClick={()=>setPhase('idle')} style={{background:'rgba(255,255,255,0.2)',color:'white',border:'2px solid rgba(255,255,255,0.4)',borderRadius:'0.75rem',padding:'0.5rem 1rem',fontWeight:900,cursor:'pointer',fontSize:'0.9rem'}}>Sound Again</button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ── SETTINGS PANEL ── */
+function SettingsPanel({ students, setStudents, timerMinutes, setTimerMinutes, onClose }) {
+  const [newName, setNewName] = useState('');
+  const [editIdx, setEditIdx] = useState(null);
+  const [editVal, setEditVal] = useState('');
+  const [localMins, setLocalMins] = useState(timerMinutes);
+
+  const addStudent = () => {
+    const n = newName.trim();
+    if (n) { setStudents(prev => [...prev, n]); setNewName(''); }
+  };
+  const removeStudent = (i) => setStudents(prev => prev.filter((_,idx) => idx !== i));
+  const startEdit = (i) => { setEditIdx(i); setEditVal(students[i]); };
+  const saveEdit = () => {
+    const v = editVal.trim();
+    if (v) { setStudents(prev => { const s=[...prev]; s[editIdx]=v; return s; }); }
+    setEditIdx(null);
+  };
+
+  return (
+    <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.8)',zIndex:300,display:'flex',alignItems:'center',justifyContent:'center',padding:'1.5rem'}}>
+      <div style={{background:'white',border:'8px solid #2D2D2D',borderRadius:'2.5rem',maxWidth:'600px',width:'100%',maxHeight:'90vh',display:'flex',flexDirection:'column',boxShadow:'0 25px 50px rgba(0,0,0,0.4)'}}>
+        <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'2rem',borderBottom:'4px solid #f1f5f9'}}>
+          <div style={{display:'flex',alignItems:'center',gap:'0.75rem'}}>
+            <Icons.Settings size={34} color="#1A365D"/>
+            <span className="font-display" style={{fontSize:'2.2rem',color:'#1A365D',letterSpacing:'0.05em'}}>SETTINGS</span>
+          </div>
+          <button onClick={onClose} style={{padding:'0.5rem',borderRadius:'0.75rem',border:'none',background:'transparent',cursor:'pointer'}}>
+            <Icons.X size={28} color="#64748b"/>
+          </button>
+        </div>
+
+        <div style={{overflowY:'auto',flex:1,padding:'2rem',display:'flex',flexDirection:'column',gap:'2rem'}}>
+          <div>
+            <div style={{display:'flex',alignItems:'center',gap:'0.5rem',marginBottom:'1rem'}}>
+              <Icons.Clock size={22} color="#1A365D"/>
+              <span className="font-body" style={{fontWeight:900,fontSize:'1.1rem',color:'#1A365D',textTransform:'uppercase',letterSpacing:'0.05em'}}>Countdown Timer</span>
+            </div>
+            <div style={{display:'flex',alignItems:'center',gap:'1rem'}}>
+              <input type="number" min="1" max="120" value={localMins}
+                onChange={e => setLocalMins(Math.max(1,parseInt(e.target.value)||1))}
+                className="font-body"
+                style={{width:'5rem',fontSize:'2rem',fontWeight:900,textAlign:'center',border:'4px solid #e2e8f0',borderRadius:'0.75rem',padding:'0.4rem',outline:'none'}}
+              />
+              <span className="font-body" style={{fontWeight:'bold',color:'#64748b',fontSize:'1.1rem'}}>minutes</span>
+              <button onClick={() => setTimerMinutes(localMins)}
+                className="font-body"
+                style={{background:'#1A365D',color:'white',padding:'0.6rem 1.2rem',borderRadius:'0.75rem',fontWeight:900,border:'none',cursor:'pointer',display:'flex',alignItems:'center',gap:'0.4rem'}}>
+                <Icons.Check size={18} color="white"/> Apply
+              </button>
+            </div>
+            <p className="font-body" style={{fontSize:'0.85rem',color:'#94a3b8',marginTop:'0.5rem'}}>Current: {timerMinutes} min. Applying resets the timer.</p>
+          </div>
+
+          <div>
+            <div style={{display:'flex',alignItems:'center',gap:'0.5rem',marginBottom:'1rem'}}>
+              <Icons.Users size={22} color="#1A365D"/>
+              <span className="font-body" style={{fontWeight:900,fontSize:'1.1rem',color:'#1A365D',textTransform:'uppercase',letterSpacing:'0.05em'}}>Student Roster ({students.length})</span>
+            </div>
+            <div style={{display:'flex',gap:'0.5rem',marginBottom:'1rem'}}>
+              <input type="text" placeholder="Add student name..." value={newName}
+                onChange={e => setNewName(e.target.value)}
+                onKeyDown={e => e.key==='Enter' && addStudent()}
+                className="font-body"
+                style={{flex:1,border:'4px solid #e2e8f0',borderRadius:'0.75rem',padding:'0.6rem 1rem',fontSize:'1.1rem',fontWeight:'bold',outline:'none'}}
+              />
+              <button onClick={addStudent}
+                style={{background:'#D4AF37',color:'white',padding:'0.6rem 1rem',borderRadius:'0.75rem',fontWeight:900,border:'none',cursor:'pointer',display:'flex',alignItems:'center',gap:'0.3rem'}}>
+                <Icons.Plus size={20} color="white"/> Add
+              </button>
+            </div>
+            <div style={{display:'flex',flexDirection:'column',gap:'0.5rem',maxHeight:'16rem',overflowY:'auto'}}>
+              {students.map((s,i) => (
+                <div key={i} style={{display:'flex',alignItems:'center',gap:'0.5rem',background:'#f8fafc',border:'2px solid #e2e8f0',borderRadius:'0.75rem',padding:'0.5rem 1rem'}}>
+                  {editIdx===i ? (
+                    <>
+                      <input autoFocus value={editVal} onChange={e=>setEditVal(e.target.value)}
+                        onKeyDown={e=>e.key==='Enter'&&saveEdit()}
+                        className="font-body"
+                        style={{flex:1,fontWeight:'bold',fontSize:'1.1rem',border:'2px solid #1A365D',borderRadius:'0.5rem',padding:'0.3rem 0.6rem',outline:'none'}}/>
+                      <button onClick={saveEdit} style={{background:'#16a34a',color:'white',padding:'0.3rem 0.8rem',borderRadius:'0.5rem',fontWeight:900,border:'none',cursor:'pointer',fontSize:'0.85rem'}}>Save</button>
+                      <button onClick={()=>setEditIdx(null)} style={{background:'#94a3b8',color:'white',padding:'0.3rem 0.8rem',borderRadius:'0.5rem',fontWeight:900,border:'none',cursor:'pointer',fontSize:'0.85rem'}}>Cancel</button>
+                    </>
+                  ) : (
+                    <>
+                      <span className="font-body" style={{flex:1,fontWeight:'bold',fontSize:'1.1rem',color:'#334155'}}>{s}</span>
+                      <button onClick={()=>startEdit(i)} style={{padding:'0.3rem',borderRadius:'0.4rem',border:'none',background:'transparent',cursor:'pointer'}}><Icons.Edit size={18} color="#64748b"/></button>
+                      <button onClick={()=>removeStudent(i)} style={{padding:'0.3rem',borderRadius:'0.4rem',border:'none',background:'transparent',cursor:'pointer'}}><Icons.Trash size={18} color="#ef4444"/></button>
+                    </>
+                  )}
+                </div>
+              ))}
+            </div>
+            <button onClick={()=>setStudents([...DEFAULT_STUDENTS])}
+              className="font-body"
+              style={{marginTop:'0.75rem',fontSize:'0.85rem',fontWeight:'bold',color:'#94a3b8',textDecoration:'underline',border:'none',background:'transparent',cursor:'pointer'}}>
+              Reset to default list
+            </button>
+          </div>
+        </div>
+
+        <div style={{padding:'1.5rem',borderTop:'4px solid #f1f5f9'}}>
+          <button onClick={onClose} className="font-display"
+            style={{width:'100%',background:'#1A365D',color:'white',padding:'1.1rem',borderRadius:'1.5rem',fontSize:'1.5rem',letterSpacing:'0.05em',border:'none',cursor:'pointer'}}>
+            DONE
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── RANDOM STUDENT PICKER (sidebar) ── */
+function StudentPicker({ students }) {
+  const [queue, setQueue] = useState([]);
+  const [current, setCurrent] = useState(null);
+  const pickNext = () => {
+    let q = queue.length > 0 ? queue : shuffle(students);
+    if (!q.length) return;
+    setCurrent(q[0]);
+    setQueue(q.slice(1));
+  };
+  return (
+    <div style={{background:'white',border:'4px solid #2D2D2D',borderRadius:'1.5rem',padding:'1rem',boxShadow:'4px 4px 0 #2D2D2D'}}>
+      <p className="font-body" style={{fontSize:'0.7rem',fontWeight:900,textTransform:'uppercase',letterSpacing:'0.1em',color:'#94a3b8',marginBottom:'0.5rem'}}>Next Student</p>
+      <div style={{background:'#f8fafc',border:'2px solid #e2e8f0',borderRadius:'0.75rem',padding:'0.75rem',textAlign:'center',minHeight:'3rem',display:'flex',alignItems:'center',justifyContent:'center',marginBottom:'0.75rem'}}>
+        {current
+          ? <span className="font-body" style={{fontWeight:900,fontSize:'1.2rem',color:'#1A365D'}}>{current}</span>
+          : <span className="font-body" style={{fontWeight:'bold',color:'#cbd5e1',fontStyle:'italic',fontSize:'0.9rem'}}>Click to pick</span>}
+      </div>
+      <button onClick={pickNext}
+        style={{width:'100%',background:'#1A365D',color:'white',padding:'0.5rem',borderRadius:'0.75rem',fontWeight:900,border:'none',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',gap:'0.4rem',fontSize:'0.85rem'}}>
+        <Icons.Dice size={16} color="white"/> {queue.length===0&&current?'Reshuffle & Pick':'Pick Student'}
+      </button>
+      {queue.length > 0 && <p className="font-body" style={{fontSize:'0.75rem',color:'#94a3b8',textAlign:'center',marginTop:'0.25rem'}}>{queue.length} remaining</p>}
+    </div>
+  );
+}
+
+/* ── PAIR DISPLAY (endurance + trust) ── */
+function PairDisplay({ students }) {
+  const [pairs, setPairs] = useState(null);
+  const generate = () => {
+    const s = shuffle(students);
+    const result = [];
+    let i = 0;
+    while (i < s.length) {
+      if (i === s.length - 3 || (i === s.length - 1 && s.length % 2 === 1)) {
+        result.push(s.slice(i, i+3)); i += 3;
+      } else {
+        result.push(s.slice(i, i+2)); i += 2;
+      }
+    }
+    setPairs(result);
+  };
+  return (
+    <div style={{background:'#eff6ff',border:'4px solid #bfdbfe',borderRadius:'1.5rem',padding:'1.25rem',marginBottom:'1rem'}}>
+      <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:'0.75rem'}}>
+        <div style={{display:'flex',alignItems:'center',gap:'0.5rem'}}>
+          <Icons.Users size={20} color="#1A365D"/>
+          <span className="font-body" style={{fontWeight:900,color:'#1A365D',textTransform:'uppercase',letterSpacing:'0.05em',fontSize:'0.9rem'}}>Student Pairs</span>
+        </div>
+        <button onClick={generate}
+          style={{background:'#1A365D',color:'white',padding:'0.5rem 1rem',borderRadius:'0.75rem',fontWeight:900,border:'none',cursor:'pointer',display:'flex',alignItems:'center',gap:'0.4rem',fontSize:'0.85rem'}}>
+          <Icons.Dice size={16} color="white"/> Generate
+        </button>
+      </div>
+      {pairs ? (
+        <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(180px,1fr))',gap:'0.5rem'}}>
+          {pairs.map((pair,i) => (
+            <div key={i} style={{background:'white',border:'2px solid #bfdbfe',borderRadius:'0.75rem',padding:'0.6rem 1rem',textAlign:'center'}}>
+              <p className="font-body" style={{fontSize:'0.7rem',fontWeight:900,color:'#93c5fd',textTransform:'uppercase',marginBottom:'0.2rem'}}>Pair {i+1}{pair.length===3?' (trio)':''}</p>
+              <p className="font-body" style={{fontWeight:900,color:'#1A365D',fontSize:'1rem'}}>{pair.join(' & ')}</p>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p className="font-body" style={{textAlign:'center',color:'#93c5fd',fontStyle:'italic',fontSize:'0.9rem'}}>Click Generate to assign pairs</p>
+      )}
+    </div>
+  );
+}
+
+/* ── CHARADES GUESSERS ── */
+function CharadesGuessers({ students }) {
+  const [queue, setQueue] = useState([]);
+  const [guessers, setGuessers] = useState(null);
+  const pickGuessers = () => {
+    let q = [...queue];
+    while (q.length < 3) q = [...q, ...shuffle(students)];
+    setGuessers(q.slice(0,3));
+    setQueue(q.slice(3));
+  };
+  return (
+    <div style={{background:'#fefce8',border:'4px solid #fde68a',borderRadius:'1.5rem',padding:'1.25rem',marginBottom:'1rem'}}>
+      <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:'0.75rem'}}>
+        <div style={{display:'flex',alignItems:'center',gap:'0.5rem'}}>
+          <Icons.Users size={20} color="#92400e"/>
+          <span className="font-body" style={{fontWeight:900,color:'#92400e',textTransform:'uppercase',letterSpacing:'0.05em',fontSize:'0.9rem'}}>Guessers</span>
+        </div>
+        <button onClick={pickGuessers}
+          style={{background:'#D4AF37',color:'white',padding:'0.5rem 1rem',borderRadius:'0.75rem',fontWeight:900,border:'none',cursor:'pointer',display:'flex',alignItems:'center',gap:'0.4rem',fontSize:'0.85rem'}}>
+          <Icons.Dice size={16} color="white"/> New Guessers
+        </button>
+      </div>
+      {guessers ? (
+        <div style={{display:'flex',gap:'0.5rem',justifyContent:'center',flexWrap:'wrap'}}>
+          {guessers.map((g,i) => (
+            <div key={i} style={{background:'white',border:'2px solid #fde68a',borderRadius:'0.75rem',padding:'0.5rem 1.2rem',fontWeight:900,color:'#1A365D',fontSize:'1.1rem'}}>{g}</div>
+          ))}
+        </div>
+      ) : (
+        <p className="font-body" style={{textAlign:'center',color:'#b45309',fontStyle:'italic',fontSize:'0.9rem'}}>Click to pick 3 guessers</p>
+      )}
+    </div>
+  );
+}
+
+/* ── GRATITUDE STUDENT CALLER ── */
+function GratitudeCaller({ students, currentLetter }) {
+  const [queue, setQueue] = useState([]);
+  const [current, setCurrent] = useState(null);
+  const pickNext = () => {
+    let q = queue.length > 0 ? queue : shuffle(students);
+    setCurrent(q[0]);
+    setQueue(q.slice(1));
+  };
+  return (
+    <div style={{background:'#fefce8',border:'4px solid #fde68a',borderRadius:'1.25rem',padding:'1rem',marginBottom:'0.75rem',display:'flex',alignItems:'center',gap:'1rem'}}>
+      <div style={{fontSize:'3rem',fontWeight:900,color:'#D4AF37',width:'3rem',textAlign:'center',flexShrink:0}}>{currentLetter}</div>
+      <div style={{flex:1}}>
+        {current
+          ? <p className="font-body" style={{fontWeight:900,fontSize:'1.5rem',color:'#1A365D',margin:0}}>{current}</p>
+          : <p className="font-body" style={{fontWeight:'bold',color:'#94a3b8',fontStyle:'italic',margin:0}}>Click to call a student</p>}
+        {queue.length>0 && <p className="font-body" style={{fontSize:'0.75rem',color:'#94a3b8',margin:0}}>{queue.length} in queue</p>}
+      </div>
+      <button onClick={pickNext}
+        style={{background:'#D4AF37',color:'white',padding:'0.75rem 1.2rem',borderRadius:'0.75rem',fontWeight:900,border:'none',cursor:'pointer',display:'flex',alignItems:'center',gap:'0.5rem',flexShrink:0}}>
+        <Icons.Dice size={20} color="white"/> Call Student
+      </button>
+    </div>
+  );
+}
+
+/* ── CORRECT MODAL with 33 tab ── */
+function CorrectModal({ info, gematria33, onClose }) {
+  const [tab, setTab] = useState('fact');
+  return (
+    <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.85)',zIndex:200,display:'flex',alignItems:'center',justifyContent:'center',padding:'2rem'}}>
+      <div style={{background:'white',border:'8px solid #2D2D2D',borderRadius:'3rem',maxWidth:'680px',width:'100%',boxShadow:'0 25px 50px rgba(0,0,0,0.4)',overflow:'hidden'}}>
+        <div style={{padding:'2.5rem',textAlign:'center',borderBottom:'4px solid #f1f5f9'}}>
+          <div style={{display:'flex',justifyContent:'center',marginBottom:'1rem'}}><Icons.Medal size={70} color="#D4AF37"/></div>
+          <h2 className="font-display" style={{fontSize:'3.5rem',color:'#1A365D',letterSpacing:'0.05em',margin:0}}>CORRECT!</h2>
+        </div>
+
+        {gematria33 && (
+          <div style={{display:'flex',borderBottom:'4px solid #f1f5f9'}}>
+            {['fact','33'].map(t => (
+              <button key={t} onClick={() => setTab(t)} className="font-body"
+                style={{flex:1,padding:'1rem',fontWeight:900,fontSize:'1.1rem',border:'none',cursor:'pointer',transition:'all 0.15s',
+                  background:tab===t?'#1A365D':'white', color:tab===t?'white':'#94a3b8'}}>
+                {t==='fact' ? 'Did You Know?' : 'Why 33 is Sacred'}
+              </button>
+            ))}
+          </div>
+        )}
+
+        <div style={{padding:'2.5rem'}}>
+          {tab==='fact'
+            ? <p className="font-body" style={{fontSize:'1.35rem',fontWeight:'bold',color:'#475569',lineHeight:1.6,margin:0}}>{info}</p>
+            : <div>
+                <div style={{display:'flex',alignItems:'center',gap:'0.75rem',marginBottom:'1rem'}}>
+                  <Icons.Flame size={28} color="#D4AF37"/>
+                  <span className="font-body" style={{fontWeight:900,fontSize:'1.3rem',color:'#1A365D'}}>The Sacred Number 33</span>
+                </div>
+                <p className="font-body" style={{fontSize:'1.2rem',fontWeight:'bold',color:'#475569',lineHeight:1.7,margin:0}}>{gematria33}</p>
+              </div>
+          }
+        </div>
+
+        <div style={{padding:'0 2.5rem 2.5rem'}}>
+          <button onClick={onClose} className="font-display"
+            style={{width:'100%',background:'#1A365D',color:'white',padding:'1.2rem',borderRadius:'1.5rem',fontSize:'1.5rem',letterSpacing:'0.05em',border:'none',cursor:'pointer'}}>
+            CONTINUE THE CLIMB
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── MAIN APP ── */
+function App() {
+  const [currentWeek, setCurrentWeek] = useState(null);
+  const [score, setScore] = useState(0);
+  const [timerMinutes, setTimerMinutesState] = useState(30);
+  const [timeLeft, setTimeLeft] = useState(1800);
+  const [activeMode, setActiveMode] = useState('learning');
+  const [gameState, setGameState] = useState('lobby');
+  const [showSettings, setShowSettings] = useState(false);
+  const [students, setStudents] = useState([...DEFAULT_STUDENTS]);
+
+  const [gameStep, setGameStep] = useState(0);
+  const [revealedTasks, setRevealedTasks] = useState({});
+  const [correctModal, setCorrectModal] = useState(null);
+  const [switchModal, setSwitchModal] = useState(false);
+  const [matchSelected, setMatchSelected] = useState(null);
+  const [matchedPairs, setMatchedPairs] = useState([]);
+  const [matchFeedback, setMatchFeedback] = useState(null);
+  const [gratitudeEntries, setGratitudeEntries] = useState({});
+  const [gratitudeLetter, setGratitudeLetter] = useState(0);
+  const [gematriaOpen, setGematriaOpen] = useState(false);
+  const [wrongFlash, setWrongFlash] = useState(false);
+  const [gevurahWrong, setGevurahWrong] = useState(new Set());
+  const [heritageModal, setHeritageModal] = useState(null); // day number or null
+  const [heritageCompleted, setHeritageCompletedState] = useState(() => getHeritageCompleted());
+
+  const setTimerMinutes = (m) => { setTimerMinutesState(m); setTimeLeft(m*60); };
+
+  useEffect(() => {
+    if (gameState!=='playing') return;
+    if (timeLeft<=0) return;
+    const t = setInterval(() => setTimeLeft(p=>p-1), 1000);
+    return () => clearInterval(t);
+  }, [gameState, timeLeft]);
+
+  const resetGameMode = () => {
+    setActiveMode('learning'); setGameStep(0); setRevealedTasks({});
+    setMatchSelected(null); setMatchedPairs([]); setMatchFeedback(null);
+    setGematriaOpen(false); setGratitudeLetter(0); setGevurahWrong(new Set());
+  };
+
+  const jumpToWeek = (id) => { setCurrentWeek(id); resetGameMode(); };
+  const handleNextWeek = () => {
+    const idx = WEEK_SEQUENCE.indexOf(currentWeek);
+    if (idx < WEEK_SEQUENCE.length-1) jumpToWeek(WEEK_SEQUENCE[idx+1]);
+    else setGameState('finished');
+  };
+
+  const addScore = (pts) => setScore(s=>s+pts);
+  const handleCorrect = (info, g33) => { addScore(25); setCorrectModal({info, gematria33:g33||null}); };
+  const closeCorrect = () => { setCorrectModal(null); setGameStep(s=>s+1); };
+
+  const flashWrong = () => { setWrongFlash(true); setTimeout(()=>setWrongFlash(false),600); };
+
+  const handleHeritageComplete = (day) => {
+    setHeritageCompletedState(prev => ({...prev, [day]: {completedAt: new Date().toISOString()}}));
+    addScore(50);
+  };
+
+  const handleMatchClick = (value, side) => {
+    if (!currentWeek) return;
+    const content = WEEK_CONTENT[currentWeek];
+    if (matchedPairs.includes(value)) return;
+    if (side==='q') { setMatchSelected(value); setMatchFeedback(null); }
+    else if (matchSelected) {
+      const pair = content.game.pairs.find(p=>p.q===matchSelected);
+      if (pair && pair.a===value) {
+        const np = [...matchedPairs, matchSelected, value];
+        setMatchedPairs(np); addScore(25);
+        setMatchFeedback({type:'correct',msg:'Correct match!'});
+        if (np.length===content.game.pairs.length*2)
+          setTimeout(()=>setMatchFeedback({type:'done',msg:'All matched — perfect Tiferet!'}),400);
+      } else {
+        setMatchFeedback({type:'wrong',msg:'Not quite — try again!'}); flashWrong();
+      }
+      setMatchSelected(null);
+    }
+  };
+
+  const handleGevurahSelect = (item, idx) => {
+    if (item.type==='boundary') {
+      addScore(10); setGameStep(s=>s+1); setMatchFeedback(null);
+      setGevurahWrong(prev => { const n=new Set(prev); n.delete(idx); return n; });
+    } else {
+      flashWrong();
+      setGevurahWrong(prev => { const n=new Set(prev); n.add(idx); return n; });
+      setMatchFeedback({type:'wrong',msg:'Chaos breaks the shield! That is not a Boundary — try again.'});
+      setTimeout(()=>setMatchFeedback(null),2500);
+    }
+  };
+
+  const toggleReveal = (idx) => setRevealedTasks(prev=>({...prev,[idx]:!prev[idx]}));
+
+  const exportGratitude = () => {
+    const text = Object.entries(gratitudeEntries).filter(([,v])=>v).map(([k,v])=>`${k}: ${v}`).join('\n');
+    const blob = new Blob([`THE HARVEST PATH — GRATITUDE LIST\n\n${text}`],{type:'text/plain'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href=url; a.download="Harvest_Path_Gratitude.txt"; a.click();
+  };
+
+  const fmtTime = (s) => `${Math.floor(s/60)}:${(s%60).toString().padStart(2,'0')}`;
+  const timerWarning = timeLeft < 300;
+
+  /* FINISHED */
+  if (gameState==='finished') return (
+    <div className="font-body" style={{minHeight:'100vh',background:'#FDFBF7',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',padding:'2rem',position:'relative',overflow:'hidden'}}>
+      <div style={{position:'absolute',inset:0,pointerEvents:'none'}}>
+        {[...Array(16)].map((_,i)=>(
+          <div key={i} style={{position:'absolute',left:`${i*6.25+3}%`,top:`${10+Math.sin(i)*30}%`,animation:`bounce 1.5s infinite`,animationDelay:`${i*0.15}s`}}>
+            <Icons.Star size={24+i%3*12}/>
+          </div>
+        ))}
+      </div>
+      <div style={{textAlign:'center',zIndex:10,maxWidth:'600px',width:'100%',display:'flex',flexDirection:'column',gap:'2rem'}}>
+        <div style={{background:'#1A365D',color:'white',padding:'3.5rem',borderRadius:'3rem',border:'8px solid white',boxShadow:'0 25px 50px rgba(0,0,0,0.3)'}}>
+          <div style={{display:'flex',justifyContent:'center',marginBottom:'1.5rem'}}><Icons.Trophy size={100} color="#facc15"/></div>
+          <h1 className="font-display" style={{fontSize:'5rem',letterSpacing:'0.05em',margin:'0 0 1rem'}}>SINAI REACHED!</h1>
+          <p style={{fontSize:'1.5rem',fontWeight:'bold',margin:0}}>We have completed the 49-day journey through the Sefirot.</p>
+        </div>
+        <div style={{display:'flex',gap:'1rem',justifyContent:'center'}}>
+          <div style={{background:'white',padding:'2rem',borderRadius:'2rem',border:'4px solid #2D2D2D',textAlign:'center'}}>
+            <p style={{fontSize:'0.75rem',fontWeight:900,textTransform:'uppercase',color:'#94a3b8',margin:'0 0 0.25rem'}}>Final Group Score</p>
+            <p className="font-display" style={{fontSize:'4rem',color:'#1A365D',margin:0}}>{score}</p>
+          </div>
+          <button onClick={()=>window.location.reload()}
+            style={{background:'#D4AF37',color:'white',padding:'2rem',borderRadius:'2rem',border:'4px solid #2D2D2D',fontWeight:900,fontSize:'1.2rem',cursor:'pointer',display:'flex',alignItems:'center',gap:'0.75rem'}}>
+            <Icons.Refresh size={28} color="white"/> RESET JOURNEY
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
+  /* LOBBY */
+  if (gameState==='lobby') return (
+    <div className="font-body" style={{minHeight:'100vh',background:'#FDFBF7',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',padding:'2rem',gap:'2rem'}}>
+      {showSettings && <SettingsPanel students={students} setStudents={setStudents} timerMinutes={timerMinutes} setTimerMinutes={setTimerMinutes} onClose={()=>setShowSettings(false)}/>}
+      <div style={{maxWidth:'900px',width:'100%',textAlign:'center',display:'flex',flexDirection:'column',gap:'1.5rem'}}>
+        <div style={{display:'flex',justifyContent:'flex-end'}}>
+          <button onClick={()=>setShowSettings(true)}
+            style={{display:'flex',alignItems:'center',gap:'0.5rem',background:'white',border:'4px solid #e2e8f0',padding:'0.75rem 1.25rem',borderRadius:'1.25rem',fontWeight:900,color:'#64748b',cursor:'pointer',fontSize:'1rem'}}>
+            <Icons.Settings size={22} color="#64748b"/> Settings
+          </button>
+        </div>
+        <div style={{display:'flex',justifyContent:'center'}}><Icons.Wheat size={64} color="#1A365D"/></div>
+        <h1 className="font-display" style={{fontSize:'clamp(3rem,10vw,7rem)',lineHeight:1,letterSpacing:'0.05em',color:'#1A365D',margin:0}}>THE HARVEST PATH</h1>
+        <p style={{fontSize:'1.4rem',fontWeight:'bold',color:'#64748b',margin:0}}>A Collaborative Journey through Sefirat HaOmer</p>
+        <div style={{aspectRatio:'16/9',width:'100%',borderRadius:'2.5rem',overflow:'hidden',border:'8px solid #1A365D',background:'#0f172a',boxShadow:'0 25px 50px rgba(0,0,0,0.3)',position:'relative'}}>
+          <iframe width="100%" height="100%"
+            src="https://www.youtube.com/embed/xHm3PD6XFLE?rel=0&modestbranding=1"
+            title="Counting the Omer — What Is Sefirat HaOmer?" frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen
+            style={{display:'block'}}/>
+        </div>
+        <div style={{display:'flex',gap:'0.75rem',justifyContent:'center',flexWrap:'wrap'}}>
+          <a href="https://www.youtube.com/watch?v=xHm3PD6XFLE" target="_blank" rel="noopener noreferrer"
+            style={{display:'flex',alignItems:'center',gap:'0.4rem',color:'#64748b',fontWeight:700,fontSize:'0.85rem',textDecoration:'none',background:'white',border:'2px solid #e2e8f0',padding:'0.4rem 0.9rem',borderRadius:'0.75rem'}}>
+            <Icons.ExternalLink size={14} color="#64748b"/> If video doesn't load, watch on YouTube
+          </a>
+          <a href="https://www.myjewishlearning.com/article/counting-the-omer/" target="_blank" rel="noopener noreferrer"
+            style={{display:'flex',alignItems:'center',gap:'0.4rem',color:'#1A365D',fontWeight:700,fontSize:'0.85rem',textDecoration:'none',background:'white',border:'2px solid #1A365D',padding:'0.4rem 0.9rem',borderRadius:'0.75rem'}}>
+            <Icons.ExternalLink size={14} color="#1A365D"/> Read: What is the Omer?
+          </a>
+        </div>
+        <button onClick={()=>{setGameState('playing');setCurrentWeek(1);}}
+          style={{background:'#1A365D',color:'white',fontSize:'2.5rem',fontWeight:900,padding:'1.5rem 5rem',borderRadius:'9999px',border:'none',cursor:'pointer',boxShadow:'0 8px 30px rgba(26,54,93,0.4)',display:'flex',alignItems:'center',gap:'1.25rem',margin:'0 auto'}}>
+          <Icons.Play size={44} color="white"/>
+          <span className="font-display" style={{letterSpacing:'0.1em'}}>BEGIN MISSION</span>
+        </button>
+      </div>
+    </div>
+  );
+
+  /* PLAYING */
+  const content = WEEK_CONTENT[currentWeek] || WEEK_CONTENT[1];
+
+  return (
+    <div className="font-body" style={{minHeight:'100vh',background:wrongFlash?'#fef2f2':'#FDFBF7',color:'#2D2D2D',padding:'1.25rem',display:'flex',flexDirection:'column',gap:'1.25rem',transition:'background 0.2s'}}>
+
+      {showSettings && <SettingsPanel students={students} setStudents={setStudents} timerMinutes={timerMinutes} setTimerMinutes={setTimerMinutes} onClose={()=>setShowSettings(false)}/>}
+      {correctModal && <CorrectModal info={correctModal.info} gematria33={correctModal.gematria33} onClose={closeCorrect}/>}
+      {heritageModal && <HeritageModal day={heritageModal} onClose={()=>setHeritageModal(null)} onComplete={handleHeritageComplete} alreadyCompleted={!!heritageCompleted[heritageModal]}/>}
+
+      {switchModal && (
+        <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.85)',zIndex:200,display:'flex',alignItems:'center',justifyContent:'center',padding:'2rem'}}>
+          <div style={{background:'white',border:'8px solid #D4AF37',borderRadius:'3rem',maxWidth:'500px',width:'100%',padding:'3rem',textAlign:'center',boxShadow:'0 25px 50px rgba(0,0,0,0.4)'}}>
+            <div style={{display:'flex',justifyContent:'center',marginBottom:'1.25rem'}}><Icons.Switch size={80} color="#D4AF37"/></div>
+            <h2 className="font-display" style={{fontSize:'3.5rem',color:'#1A365D',letterSpacing:'0.05em',margin:'0 0 1rem'}}>SWITCH ROLES!</h2>
+            <p style={{fontSize:'1.3rem',fontWeight:'bold',color:'#475569',marginBottom:'2rem'}}>Great job! Now the other partner faces the board and becomes the Leader for Task 2.</p>
+            <button onClick={()=>{setSwitchModal(false);setGameStep(1);}} className="font-display"
+              style={{width:'100%',background:'#D4AF37',color:'white',padding:'1.1rem',borderRadius:'1.5rem',fontSize:'1.5rem',letterSpacing:'0.05em',border:'none',cursor:'pointer'}}>
+              GOT IT — SWITCH!
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* HUD */}
+      <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',background:'white',border:'8px solid #2D2D2D',padding:'1.25rem 2rem',borderRadius:'2rem',boxShadow:'10px 10px 0 #2D2D2D',flexWrap:'wrap',gap:'1rem'}}>
+        <div style={{display:'flex',alignItems:'center',gap:'1.25rem'}}>
+          <div style={{background:'#1A365D',padding:'0.75rem',borderRadius:'1rem',display:'flex',alignItems:'center',justifyContent:'center'}}>
+            {currentWeek===33 ? <Icons.Flame size={44} color="#facc15"/> : <Icons.Wheat size={44} color="white"/>}
+          </div>
+          <div>
+            <h2 className="font-display" style={{fontSize:'3rem',letterSpacing:'0.04em',lineHeight:1,margin:0}}>{content.title.toUpperCase()}</h2>
+            <span style={{fontSize:'2rem',fontWeight:900,color:'#D4AF37'}} dir="rtl">{content.hebrewTitle}</span>
+          </div>
+        </div>
+        <div style={{display:'flex',gap:'0.75rem',alignItems:'center'}}>
+          <button onClick={()=>setShowSettings(true)}
+            style={{padding:'0.75rem',background:'#f1f5f9',border:'4px solid #e2e8f0',borderRadius:'1rem',cursor:'pointer'}} title="Settings">
+            <Icons.Settings size={26} color="#64748b"/>
+          </button>
+          <div style={{padding:'0.75rem 2rem',borderRadius:'1rem',border:'4px solid #2D2D2D',textAlign:'center',background:timerWarning?'#fef2f2':'#f1f5f9',borderColor:timerWarning?'#f87171':'#2D2D2D'}}>
+            <p style={{fontSize:'0.7rem',fontWeight:900,textTransform:'uppercase',color:'#94a3b8',margin:0}}>Time Left</p>
+            <p style={{fontSize:'2.5rem',fontWeight:900,margin:0,color:timerWarning?'#dc2626':'#2D2D2D',fontVariantNumeric:'tabular-nums'}}>{fmtTime(timeLeft)}</p>
+          </div>
+          <div style={{padding:'0.75rem 2rem',borderRadius:'1rem',border:'4px solid #2D2D2D',background:'#eff6ff',textAlign:'center'}}>
+            <p style={{fontSize:'0.7rem',fontWeight:900,textTransform:'uppercase',color:'#94a3b8',margin:0}}>Score</p>
+            <p className="font-display" style={{fontSize:'2.5rem',color:'#1A365D',margin:0}}>{score}</p>
+          </div>
+        </div>
+      </div>
+
+      {/* MAIN GRID */}
+      <div style={{display:'grid',gridTemplateColumns:'1fr 3fr',gap:'1.25rem',flex:1,overflow:'hidden'}}>
+
+        {/* Sidebar */}
+        <div style={{display:'flex',flexDirection:'column',gap:'1rem'}}>
+          {[{id:'learning',icon:<Icons.Book size={24}/>,label:'Learning'},{id:'discussion',icon:<Icons.Chat size={24}/>,label:'Discussion'},{id:'game',icon:<Icons.Trophy size={24}/>,label:'Challenge'}].map(mode=>(
+            <button key={mode.id} onClick={()=>{setActiveMode(mode.id);setGameStep(0);setMatchFeedback(null);}}
+              style={{padding:'1.5rem',textAlign:'left',borderRadius:'1.75rem',border:'4px solid',fontWeight:900,fontSize:'1.2rem',cursor:'pointer',display:'flex',alignItems:'center',gap:'0.75rem',transition:'all 0.15s',
+                background:activeMode===mode.id?'#1A365D':'white',
+                color:activeMode===mode.id?'white':'#2D2D2D',
+                borderColor:activeMode===mode.id?'#1A365D':'#2D2D2D',
+                opacity:activeMode===mode.id?1:0.6,
+                boxShadow:activeMode===mode.id?'8px 8px 0 #2D2D2D':'none',
+                transform:activeMode===mode.id?'translateY(-2px)':'none'}}>
+              {mode.icon} {mode.label}
+            </button>
+          ))}
+
+          <StudentPicker students={students}/>
+
+          <button onClick={handleNextWeek}
+            style={{marginTop:'auto',background:'#D4AF37',color:'white',padding:'1.5rem',borderRadius:'1.75rem',fontWeight:900,fontSize:'1.2rem',border:'none',cursor:'pointer',boxShadow:'8px 8px 0 #2D2D2D',display:'flex',alignItems:'center',justifyContent:'center',gap:'0.5rem'}}>
+            NEXT PHASE <Icons.ChevronRight size={24} color="white"/>
+          </button>
+        </div>
+
+        {/* Content Panel */}
+        <div style={{background:'white',border:'8px solid #2D2D2D',borderRadius:'2.5rem',padding:'2.5rem',overflowY:'auto',maxHeight:'72vh'}}>
+
+
+          {/* LEARNING — Heritage override for days 28/29 */}
+          {activeMode==='learning' && (currentWeek===28||currentWeek===29) && (
+            <div style={{display:'flex',flexDirection:'column',gap:'2rem'}}>
+              <div style={{background:'#0038b8',padding:'2rem',borderRadius:'2rem',textAlign:'center',color:'white',position:'relative',overflow:'hidden'}}>
+                <div style={{position:'absolute',top:'-20px',right:'-20px',opacity:0.1}}><MagenDavid size={120} color="white"/></div>
+                <p style={{fontSize:'2.5rem',fontWeight:900,lineHeight:1.5,marginBottom:'1rem',direction:'rtl'}}>{content.quote}</p>
+                <p style={{fontSize:'1.3rem',fontWeight:'bold',fontStyle:'italic',opacity:0.85,margin:0}}>"{content.translation}"</p>
+              </div>
+              <p style={{fontSize:'1.4rem',lineHeight:1.6,fontWeight:'bold',color:'#334155',padding:'0 0.5rem',margin:0}}>{content.learning}</p>
+              <BlessingPanel weekId={currentWeek} isHeritage={true}/>
+              {currentWeek===28 && <SirenPlayer/>}
+              <MoreResourcesPanel weekId={currentWeek} accent="#0038b8"/>
+              <button onClick={()=>setHeritageModal(currentWeek)}
+                style={{background:'#0038b8',color:'white',border:'none',borderRadius:'1.5rem',padding:'1.25rem 2rem',fontSize:'1.2rem',fontWeight:900,cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',gap:'0.75rem',boxShadow:'0 6px 20px rgba(0,56,184,0.4)'}}>
+                <MagenDavid size={26} color="white"/> OPEN HERITAGE MODULE
+              </button>
+            </div>
+          )}
+
+          {/* LEARNING */}
+          {activeMode==='learning' && (currentWeek!==28 && currentWeek!==29) && (
+            <div style={{display:'flex',flexDirection:'column',gap:'1.5rem'}}>
+              <SessionOpener weekTitle={content.title} weekId={currentWeek}/>
+              <div style={{background:'#FDFBF7',padding:'2.5rem',borderRadius:'2rem',border:'4px dashed #D4AF37',textAlign:'center'}}>
+                <p style={{fontSize:'3rem',fontWeight:900,lineHeight:1.5,marginBottom:'1.5rem',direction:'rtl'}}>{content.quote}</p>
+                <p style={{fontSize:'1.5rem',fontWeight:'bold',fontStyle:'italic',color:'#64748b',margin:0}}>"{content.translation}"</p>
+              </div>
+              <p style={{fontSize:'1.4rem',lineHeight:1.6,fontWeight:'bold',color:'#334155',padding:'0 0.5rem',margin:0}}>{content.learning}</p>
+              <BlessingPanel weekId={currentWeek} isHeritage={false}/>
+              {content.middah && <MiddahPanel middah={content.middah} accent="#1A365D"/>}
+              <MoreResourcesPanel weekId={currentWeek} accent="#1A365D"/>
+            </div>
+          )}
+
+
+          {/* DISCUSSION — Heritage override for days 28/29 */}
+          {activeMode==='discussion' && (currentWeek===28||currentWeek===29) && (
+            <div style={{display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',textAlign:'center',gap:'2.5rem',minHeight:'320px'}}>
+              <div style={{padding:'2rem',background:'#eff6ff',borderRadius:'9999px',border:'4px solid #0038b8'}}>
+                <MagenDavid size={80} color="#0038b8"/>
+              </div>
+              <h3 style={{fontSize:'2rem',fontWeight:900,maxWidth:'650px',color:'#0038b8',fontStyle:'italic',lineHeight:1.3,margin:0}}>
+                "Open the Heritage Module to access two curated discussion prompts connecting Israel's history to Jewish identity today."
+              </h3>
+              <button onClick={()=>{setHeritageModal(currentWeek);}}
+                style={{background:'#0038b8',color:'white',border:'none',borderRadius:'1.5rem',padding:'1rem 2.5rem',fontSize:'1.1rem',fontWeight:900,cursor:'pointer',display:'flex',alignItems:'center',gap:'0.6rem'}}>
+                <Icons.Chat size={22} color="white"/> Open Discussions
+              </button>
+            </div>
+          )}
+
+          {/* DISCUSSION */}
+          {activeMode==='discussion' && (currentWeek!==28 && currentWeek!==29) && (
+            <div style={{display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',textAlign:'center',gap:'2.5rem',minHeight:'320px'}}>
+              <div style={{padding:'2.5rem',background:'#eff6ff',borderRadius:'9999px',border:'4px solid #1A365D'}}>
+                <Icons.Chat size={90} color="#1A365D"/>
+              </div>
+              <h3 style={{fontSize:'2.5rem',fontWeight:900,maxWidth:'700px',color:'#1A365D',fontStyle:'italic',lineHeight:1.3,margin:0}}>"{content.discussion}"</h3>
+              <div style={{background:'#f1f5f9',padding:'0.75rem 2rem',borderRadius:'1rem',display:'flex',alignItems:'center',gap:'0.75rem'}}>
+                <Icons.Users size={26} color="#64748b"/>
+                <span style={{fontWeight:900,fontSize:'1rem',textTransform:'uppercase',letterSpacing:'0.1em',color:'#64748b'}}>Team Conversation</span>
+              </div>
+            </div>
+          )}
+
+          {/* GAME */}
+          {activeMode==='game' && (
+            <div style={{display:'flex',flexDirection:'column',gap:'1.25rem'}}>
+
+              <div style={{borderBottom:'8px solid #f1f5f9',paddingBottom:'1.25rem',display:'flex',justifyContent:'space-between',alignItems:'flex-start'}}>
+                <div>
+                  <h3 className="font-display" style={{fontSize:'3rem',color:'#1A365D',letterSpacing:'0.04em',margin:0}}>{content.game.title.toUpperCase()}</h3>
+                  <p style={{fontSize:'1.1rem',fontWeight:'bold',color:'#94a3b8',marginTop:'0.5rem',fontStyle:'italic'}}>{content.game.instructions}</p>
+                </div>
+                {content.id===33 && (
+                  <button onClick={()=>setGematriaOpen(o=>!o)}
+                    style={{display:'flex',alignItems:'center',gap:'0.5rem',background:'#fff7ed',border:'4px solid #fdba74',color:'#c2410c',padding:'0.75rem 1.25rem',borderRadius:'1.25rem',fontWeight:900,fontSize:'1rem',cursor:'pointer',flexShrink:0}}>
+                    <Icons.Question size={24} color="#c2410c"/> GEMATRIA?
+                  </button>
+                )}
+              </div>
+
+              {gematriaOpen && content.id===33 && (
+                <div style={{background:'#1A365D',color:'white',padding:'2rem',borderRadius:'1.75rem',position:'relative'}}>
+                  <button onClick={()=>setGematriaOpen(false)} style={{position:'absolute',top:'1rem',right:'1rem',background:'transparent',border:'none',cursor:'pointer',opacity:0.6}}>
+                    <Icons.X size={22} color="white"/>
+                  </button>
+                  <p style={{fontWeight:900,fontSize:'1.3rem',marginBottom:'0.75rem'}}>What is Gematria?</p>
+                  <p style={{fontSize:'1.1rem',lineHeight:1.6,margin:0}}>In Hebrew, every letter has a numerical value. Alef = 1, Bet = 2, and so on up the alphabet. We add the letters in a word together to find its hidden numerical meaning. This is called <strong>Gematria</strong> — one of the tools Kabbalists use to find deeper connections in Torah.</p>
+                </div>
+              )}
+
+              {matchFeedback?.type==='wrong' && (
+                <div style={{background:'#fef2f2',border:'4px solid #f87171',color:'#b91c1c',padding:'1.25rem',borderRadius:'1.25rem',fontWeight:900,fontSize:'1.2rem',textAlign:'center'}}>
+                  {matchFeedback.msg}
+                </div>
+              )}
+
+
+              {/* HERITAGE MODULE TRIGGER */}
+              {content.game.type==='heritage' && (
+                <div style={{display:'flex',flexDirection:'column',gap:'1.5rem',alignItems:'center',justifyContent:'center',minHeight:'300px',textAlign:'center'}}>
+                  <HeritageMilestoneCard
+                    day={content.game.heritageDay}
+                    completed={!!heritageCompleted[content.game.heritageDay]}
+                    onOpen={()=>setHeritageModal(content.game.heritageDay)}
+                  />
+                  <p style={{fontSize:'1rem',color:'#64748b',fontWeight:700,fontStyle:'italic',maxWidth:'480px'}}>
+                    This is a special Heritage observance. Click the card above to open the full three-part module — Learning, Discussion, and Challenge.
+                  </p>
+                  {heritageCompleted[content.game.heritageDay] && (
+                    <div style={{background:'#f0fdf4',border:'4px solid #16a34a',borderRadius:'1.25rem',padding:'1rem 2rem',display:'flex',alignItems:'center',gap:'0.75rem'}}>
+                      <Icons.Check size={28}/>
+                      <span style={{fontWeight:900,color:'#15803d',fontSize:'1.1rem'}}>Heritage Module Completed! +50 points</span>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* CHARADES */}
+              {content.game.type==='charades' && (
+                <div style={{display:'flex',flexDirection:'column',gap:'0.75rem'}}>
+                  <CharadesGuessers students={students}/>
+                  {content.game.tasks.map((task,idx)=>{
+                    const done=gameStep>idx, active=gameStep===idx, revealed=revealedTasks[idx];
+                    return (
+                      <div key={idx} style={{padding:'1.25rem 1.5rem',border:'4px solid',borderRadius:'1.5rem',display:'flex',alignItems:'center',justifyContent:'space-between',transition:'all 0.2s',
+                        background:done?'#f0fdf4':'#f8fafc', borderColor:done?'#16a34a':'#e2e8f0', opacity:done?0.5:1}}>
+                        <span style={{fontSize:'2.5rem',fontWeight:900,color:'#e2e8f0'}}>#{idx+1}</span>
+                        <div style={{flex:1,padding:'0 1.5rem'}}>
+                          {done ? <span style={{fontSize:'1.3rem',fontWeight:900,color:'#16a34a',fontStyle:'italic'}}>Complete</span>
+                          : revealed ? <span style={{fontSize:'1.3rem',fontWeight:900,color:'#1d4ed8'}}>{task}</span>
+                          : <span style={{fontSize:'1.3rem',fontWeight:900,color:'#cbd5e1',textTransform:'uppercase',fontStyle:'italic',letterSpacing:'0.1em'}}>Locked</span>}
+                        </div>
+                        {active&&!revealed&&<button onClick={()=>toggleReveal(idx)} style={{background:'#1e293b',color:'white',padding:'0.75rem 1.5rem',borderRadius:'0.75rem',fontWeight:900,border:'none',cursor:'pointer',display:'flex',alignItems:'center',gap:'0.4rem'}}><Icons.Eye size={18} color="white"/> Reveal</button>}
+                        {active&&revealed&&(
+                          <div style={{display:'flex',gap:'0.5rem'}}>
+                            <button onClick={()=>toggleReveal(idx)} style={{background:'#64748b',color:'white',padding:'0.75rem',borderRadius:'0.75rem',fontWeight:900,border:'none',cursor:'pointer'}}><Icons.EyeOff size={18} color="white"/></button>
+                            <button onClick={()=>{setRevealedTasks({});setGameStep(s=>s+1);addScore(25);}} style={{background:'#16a34a',color:'white',padding:'0.75rem 1.5rem',borderRadius:'0.75rem',fontWeight:900,border:'none',cursor:'pointer',display:'flex',alignItems:'center',gap:'0.4rem'}}><Icons.Check size={18} color="white"/> Correct!</button>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+
+              {/* GEVURAH SORT */}
+              {content.game.type==='sort' && (() => {
+                const boundaryCount = content.game.items.filter(i=>i.type==='boundary').length;
+                return (
+                  <div style={{display:'flex',flexDirection:'column',gap:'0.75rem'}}>
+                    <div style={{display:'flex',alignItems:'center',gap:'0.75rem',background:'#eff6ff',border:'2px solid #bfdbfe',padding:'1rem 1.25rem',borderRadius:'1.25rem',marginBottom:'0.5rem'}}>
+                      <Icons.Shield size={26} color="#1A365D"/>
+                      <span style={{fontWeight:900,color:'#1A365D'}}>Shield Progress: {gameStep} / {boundaryCount} boundaries found</span>
+                    </div>
+                    {content.game.items.map((item,idx)=>{
+                      const isCorrectDone = item.type==='boundary' && gameStep > content.game.items.slice(0,idx).filter(i=>i.type==='boundary').length;
+                      const wasWrong = gevurahWrong.has(idx);
+                      // A boundary item is "done" when enough boundaries have been found
+                      const boundariesBeforeThis = content.game.items.slice(0,idx).filter(i=>i.type==='boundary').length;
+                      const correctlyDone = item.type==='boundary' && gameStep > boundariesBeforeThis;
+                      const disabled = correctlyDone;
+                      return (
+                        <button key={idx} disabled={disabled} onClick={()=>handleGevurahSelect(item, idx)}
+                          style={{padding:'1.75rem',border:'4px solid',borderRadius:'2rem',fontSize:'1.3rem',fontWeight:900,cursor:disabled?'default':'pointer',display:'flex',justifyContent:'space-between',alignItems:'center',transition:'all 0.15s',
+                            background: correctlyDone ? '#f0fdf4' : wasWrong ? '#fef2f2' : 'white',
+                            borderColor: correctlyDone ? '#16a34a' : wasWrong ? '#f87171' : '#2D2D2D',
+                            opacity: correctlyDone ? 0.5 : 1}}>
+                          {item.text}
+                          {correctlyDone && <Icons.Check size={36}/>}
+                          {wasWrong && !correctlyDone && <Icons.XCircle size={36}/>}
+                        </button>
+                      );
+                    })}
+                  </div>
+                );
+              })()}
+
+              {/* MATCHING */}
+              {content.game.type==='matching' && (
+                <div>
+                  {matchFeedback?.type==='correct'&&<div style={{background:'#f0fdf4',border:'4px solid #16a34a',color:'#15803d',padding:'1.25rem',borderRadius:'1.25rem',fontWeight:900,fontSize:'1.2rem',textAlign:'center',marginBottom:'1rem'}}>{matchFeedback.msg}</div>}
+                  {matchFeedback?.type==='done'&&(
+                    <div style={{background:'#eff6ff',border:'4px solid #1A365D',padding:'2rem',borderRadius:'2rem',textAlign:'center',marginBottom:'1rem'}}>
+                      <div style={{display:'flex',justifyContent:'center',marginBottom:'0.75rem'}}><Icons.Sparkle size={44}/></div>
+                      <p className="font-display" style={{fontSize:'2.5rem',color:'#1A365D',letterSpacing:'0.04em',margin:0}}>{matchFeedback.msg}</p>
+                    </div>
+                  )}
+                  <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'1.5rem'}}>
+                    <div style={{display:'flex',flexDirection:'column',gap:'0.75rem'}}>
+                      <p style={{fontSize:'0.75rem',fontWeight:900,textTransform:'uppercase',letterSpacing:'0.1em',color:'#94a3b8',marginBottom:'0.25rem'}}>Actions</p>
+                      {content.game.pairs.map((pair,idx)=>{
+                        const matched=matchedPairs.includes(pair.q), selected=matchSelected===pair.q;
+                        return (
+                          <button key={idx} onClick={()=>handleMatchClick(pair.q,'q')} disabled={matched}
+                            style={{padding:'1.25rem',border:'4px solid',borderRadius:'1.25rem',fontWeight:900,fontSize:'1.1rem',textAlign:'left',cursor:'pointer',transition:'all 0.15s',
+                              background:matched?'#f0fdf4':selected?'#dbeafe':'white',
+                              borderColor:matched?'#16a34a':selected?'#3b82f6':'#2D2D2D',
+                              transform:selected?'scale(1.02)':'scale(1)'}}>
+                            {pair.q} {matched&&<span style={{float:'right'}}><Icons.Check size={24}/></span>}
+                          </button>
+                        );
+                      })}
+                    </div>
+                    <div style={{display:'flex',flexDirection:'column',gap:'0.75rem'}}>
+                      <p style={{fontSize:'0.75rem',fontWeight:900,textTransform:'uppercase',letterSpacing:'0.1em',color:'#94a3b8',marginBottom:'0.25rem'}}>Sefirot</p>
+                      {content.game.pairs.map((pair,idx)=>{
+                        const matched=matchedPairs.includes(pair.a);
+                        return (
+                          <button key={idx} onClick={()=>handleMatchClick(pair.a,'a')} disabled={matched}
+                            style={{padding:'1.25rem',border:'4px solid',borderRadius:'1.25rem',fontWeight:900,fontSize:'1.1rem',cursor:'pointer',transition:'all 0.15s',
+                              background:matched?'#f0fdf4':matchSelected?'#fefce8':'white',
+                              borderColor:matched?'#16a34a':'#D4AF37',
+                              transform:matchSelected&&!matched?'scale(1.01)':'scale(1)'}}>
+                            {pair.a} {matched&&<span style={{float:'right'}}><Icons.Check size={24}/></span>}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* ENDURANCE RELAY */}
+              {content.game.type==='endurance' && (
+                <div style={{display:'flex',flexDirection:'column',gap:'0.75rem'}}>
+                  <PairDisplay students={students}/>
+                  {content.game.tasks.map((task,idx)=>{
+                    const done=gameStep>idx, active=gameStep===idx, revealed=revealedTasks[idx];
+                    return (
+                      <div key={idx} style={{padding:'1.25rem 1.5rem',border:'4px solid',borderRadius:'1.5rem',transition:'all 0.2s',
+                        background:done?'#f0fdf4':'#f8fafc', borderColor:done?'#16a34a':'#e2e8f0', opacity:done?0.5:1}}>
+                        <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',gap:'1rem'}}>
+                          <span style={{fontSize:'1.3rem',fontWeight:900,color:'#334155',fontStyle:'italic',flex:1}}>{task.q}</span>
+                          <div style={{display:'flex',gap:'0.5rem',flexShrink:0}}>
+                            <button onClick={()=>toggleReveal(idx)}
+                              style={{background:revealed?'#64748b':'#1e293b',color:'white',padding:'0.6rem 1.2rem',borderRadius:'0.75rem',fontWeight:900,border:'none',cursor:'pointer',display:'flex',alignItems:'center',gap:'0.4rem',fontSize:'0.9rem'}}>
+                              {revealed?<><Icons.EyeOff size={16} color="white"/> Hide</>:<><Icons.Eye size={16} color="white"/> Show Hebrew</>}
+                            </button>
+                            {active&&<button onClick={()=>{setGameStep(s=>s+1);setRevealedTasks({});addScore(20);}} style={{background:'#16a34a',color:'white',padding:'0.6rem 1.2rem',borderRadius:'0.75rem',fontWeight:900,border:'none',cursor:'pointer',display:'flex',alignItems:'center',gap:'0.4rem',fontSize:'0.9rem'}}><Icons.Check size={16} color="white"/> Correct</button>}
+                          </div>
+                        </div>
+                        {revealed&&<p style={{fontSize:'2.2rem',fontWeight:900,color:'#1A365D',marginTop:'0.75rem',textAlign:'right',direction:'rtl'}}>{task.a}</p>}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+
+              {/* QUIZ */}
+              {content.game.type==='quiz' && (
+                <div style={{display:'flex',flexDirection:'column',gap:'1.5rem',textAlign:'center',paddingBottom:'1.5rem'}}>
+                  {content.game.questions[gameStep] ? (
+                    <>
+                      <div style={{background:'#f8fafc',border:'8px solid #f1f5f9',padding:'3rem',borderRadius:'3rem'}}>
+                        <p className="font-display" style={{fontSize:'2.5rem',color:'#1e293b',letterSpacing:'0.03em',margin:0}}>{content.game.questions[gameStep].q}</p>
+                      </div>
+                      <div style={{display:'flex',flexDirection:'column',gap:'0.75rem'}}>
+                        {content.game.questions[gameStep].options.map((opt,i)=>(
+                          <button key={i}
+                            onClick={()=>{const q=content.game.questions[gameStep]; if(opt===q.a) handleCorrect(q.info,q.gematria33||null); else flashWrong();}}
+                            style={{padding:'1.75rem',background:'white',border:'4px solid #2D2D2D',borderRadius:'1.75rem',fontSize:'1.75rem',fontWeight:900,cursor:'pointer',transition:'all 0.15s',boxShadow:'0 4px 12px rgba(0,0,0,0.08)'}}>
+                            {opt}
+                          </button>
+                        ))}
+                      </div>
+                    </>
+                  ) : (
+                    <div style={{padding:'3.5rem',background:'#eff6ff',border:'4px solid #1A365D',borderRadius:'3rem',display:'flex',flexDirection:'column',alignItems:'center',gap:'1rem'}}>
+                      <Icons.Mountain size={80} color="#1A365D"/>
+                      <p className="font-display" style={{fontSize:'3rem',color:'#1A365D',letterSpacing:'0.04em',margin:0}}>SUMMIT REACHED!</p>
+                    </div>
+                  )}
+                </div>
+              )}
+
+
+              {/* APPENDIX */}
+              {content.game.type==='appendix' && (() => {
+                const [appTab, setAppTab] = React.useState('blessing');
+                const [searchDay, setSearchDay] = React.useState('');
+                const weekGroups = [];
+                for(let w=0;w<7;w++) weekGroups.push(ALL_49_OMER_COUNTS.slice(w*7,(w+1)*7));
+                const filtered = searchDay ? ALL_49_OMER_COUNTS.filter(d=>String(d.day)===searchDay) : null;
+                return (
+                  <div style={{display:'flex',flexDirection:'column',gap:'1.25rem'}}>
+                    <div style={{display:'flex',borderRadius:'1.25rem',overflow:'hidden',border:'4px solid #1A365D'}}>
+                      {[{id:'blessing',label:'The Blessing'},{id:'all49',label:'All 49 Days'},{id:'about',label:'About the Omer'}].map(t=>(
+                        <button key={t.id} onClick={()=>setAppTab(t.id)}
+                          style={{flex:1,padding:'0.75rem',border:'none',cursor:'pointer',fontWeight:900,fontSize:'0.9rem',transition:'all 0.15s',
+                            background:appTab===t.id?'#1A365D':'white',color:appTab===t.id?'white':'#94a3b8'}}>
+                          {t.label}
+                        </button>
+                      ))}
+                    </div>
+                    {appTab==='blessing' && (
+                      <div style={{display:'flex',flexDirection:'column',gap:'1.25rem'}}>
+                        <div style={{background:'#1A365D',borderRadius:'1.5rem',padding:'2rem',color:'white',textAlign:'center'}}>
+                          <p style={{margin:'0 0 0.5rem',fontSize:'0.7rem',fontWeight:900,textTransform:'uppercase',letterSpacing:'0.1em',opacity:0.6}}>Omer Blessing — recited each night after nightfall</p>
+                          <p style={{fontSize:'1.4rem',fontWeight:900,lineHeight:1.8,direction:'rtl',margin:'0 0 1rem'}}>{OMER_BLESSING_GENERAL.hebrew}</p>
+                          <p style={{fontSize:'1rem',fontStyle:'italic',opacity:0.8,margin:'0 0 0.5rem'}}>{OMER_BLESSING_GENERAL.transliteration}</p>
+                          <p style={{fontSize:'0.95rem',opacity:0.75,margin:0}}>{OMER_BLESSING_GENERAL.translation}</p>
+                        </div>
+                        <p style={{fontSize:'0.9rem',color:'#64748b',fontStyle:'italic',margin:0}}>{OMER_BLESSING_GENERAL.note}</p>
+                        <div style={{display:'flex',gap:'0.75rem',flexWrap:'wrap'}}>
+                          <a href="https://www.myjewishlearning.com/article/counting-the-omer/" target="_blank" rel="noopener noreferrer"
+                            style={{display:'flex',alignItems:'center',gap:'0.4rem',color:'#1A365D',fontWeight:900,fontSize:'0.85rem',textDecoration:'none',border:'2px solid #1A365D',padding:'0.4rem 0.9rem',borderRadius:'0.75rem'}}>
+                            <Icons.ExternalLink size={14} color="#1A365D"/> MyJewishLearning: The Omer
+                          </a>
+                          <a href="https://www.sefaria.org/Leviticus.23.15?lang=bi" target="_blank" rel="noopener noreferrer"
+                            style={{display:'flex',alignItems:'center',gap:'0.4rem',color:'#004E5F',fontWeight:900,fontSize:'0.85rem',textDecoration:'none',border:'2px solid #004E5F',padding:'0.4rem 0.9rem',borderRadius:'0.75rem'}}>
+                            <Icons.ExternalLink size={14} color="#004E5F"/> Sefaria: Leviticus 23:15
+                          </a>
+                        </div>
+                      </div>
+                    )}
+                    {appTab==='all49' && (
+                      <div style={{display:'flex',flexDirection:'column',gap:'0.75rem'}}>
+                        <div style={{display:'flex',alignItems:'center',gap:'0.75rem',marginBottom:'0.25rem'}}>
+                          <span style={{fontWeight:900,color:'#1A365D',fontSize:'0.9rem'}}>Jump to day:</span>
+                          <input type="number" min="1" max="49" placeholder="1–49" value={searchDay}
+                            onChange={e=>setSearchDay(e.target.value)}
+                            style={{border:'3px solid #1A365D',borderRadius:'0.75rem',padding:'0.4rem 0.8rem',fontSize:'1rem',fontWeight:'bold',outline:'none',width:'100px'}}/>
+                          {searchDay && <button onClick={()=>setSearchDay('')} style={{background:'#f1f5f9',border:'2px solid #e2e8f0',borderRadius:'0.5rem',padding:'0.3rem 0.6rem',fontWeight:900,cursor:'pointer',fontSize:'0.85rem'}}>Clear</button>}
+                        </div>
+                        {(filtered ? [null] : weekGroups).map((group, wi) => (
+                          <div key={wi} style={{display:'flex',flexDirection:'column',gap:'0.35rem'}}>
+                            {!filtered && <p style={{fontWeight:900,color:'#1A365D',fontSize:'0.75rem',textTransform:'uppercase',letterSpacing:'0.08em',margin:'0.5rem 0 0.25rem'}}>Week {wi+1} — Days {wi*7+1}–{(wi+1)*7}</p>}
+                            {(filtered || group).map(dc => (
+                              <div key={dc.day} style={{background:'white',border:'2px solid #e2e8f0',borderRadius:'0.75rem',padding:'0.65rem 1rem'}}>
+                                <div style={{display:'flex',alignItems:'flex-start',gap:'0.75rem'}}>
+                                  <span style={{fontWeight:900,color:'#D4AF37',fontSize:'1.2rem',flexShrink:0,minWidth:'3.5rem',lineHeight:1.2}}>Day {dc.day}</span>
+                                  <div style={{flex:1}}>
+                                    <p style={{fontWeight:900,color:'#1A365D',fontSize:'0.9rem',direction:'rtl',margin:'0 0 0.1rem',lineHeight:1.5}}>{dc.he}</p>
+                                    <p style={{fontSize:'0.8rem',color:'#64748b',margin:0}}>{dc.en}</p>
+                                  </div>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    {appTab==='about' && (
+                      <div style={{display:'flex',flexDirection:'column',gap:'1.25rem'}}>
+                        <div style={{background:'#FDFBF7',border:'3px dashed #D4AF37',borderRadius:'1.5rem',padding:'1.5rem'}}>
+                          <p style={{fontWeight:900,color:'#1A365D',fontSize:'1.1rem',margin:'0 0 0.75rem'}}>What is Sefirat HaOmer?</p>
+                          <p style={{fontSize:'1rem',lineHeight:1.7,color:'#334155',margin:0}}>Sefirat HaOmer is the 49-day period between Passover and Shavuot. We count each day as a spiritual preparation for receiving the Torah. The word "Omer" refers to the ancient barley offering brought to the Temple on the second day of Passover. Today we count without the Temple, but the practice connects us to Israel's agricultural calendar and to our people's spiritual journey from slavery at Passover to revelation at Sinai.</p>
+                        </div>
+                        <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'0.75rem'}}>
+                          {[
+                            { label:"Sefaria: Leviticus 23:15 (source)", url:"https://www.sefaria.org/Leviticus.23.15?lang=bi", color:"#004E5F" },
+                            { label:"My Jewish Learning: The Omer", url:"https://www.myjewishlearning.com/article/counting-the-omer/", color:"#1A365D" },
+                            { label:"Chabad: Full Omer Counting", url:"https://www.chabad.org/holidays/sefirat_haomer/default_cdo/jewish/Sefirat-HaOmer.htm", color:"#8B0000" },
+                            { label:"The iCenter: Teaching the Omer", url:"https://theicenter.org/", color:"#2d6a4f" },
+                          ].map((r,i)=>(
+                            <a key={i} href={r.url} target="_blank" rel="noopener noreferrer"
+                              style={{display:'flex',alignItems:'center',gap:'0.5rem',padding:'0.75rem 1rem',background:'white',border:`2px solid ${r.color}`,borderRadius:'0.75rem',textDecoration:'none',color:r.color,fontWeight:700,fontSize:'0.85rem'}}>
+                              <Icons.ExternalLink size={14} color={r.color}/>{r.label}
+                            </a>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })()}
+
+              {/* TRUST CONNECTION */}
+              {content.game.type==='trust' && (
+                <div style={{display:'flex',flexDirection:'column',gap:'0.75rem'}}>
+                  <PairDisplay students={students}/>
+                  {content.game.tasks.map((task,idx)=>{
+                    const done=gameStep>idx, active=gameStep===idx;
+                    return (
+                      <div key={idx} style={{padding:'2rem',border:'4px solid',borderRadius:'1.75rem',transition:'all 0.2s',
+                        background:done?'#f0fdf4':active?'#eff6ff':'#f8fafc',
+                        borderColor:done?'#16a34a':active?'#3b82f6':'#e2e8f0'}}>
+                        <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',gap:'2rem'}}>
+                          <div style={{flex:1}}>
+                            <p style={{fontSize:'0.7rem',fontWeight:900,textTransform:'uppercase',letterSpacing:'0.1em',color:'#94a3b8',marginBottom:'0.5rem'}}>Task {idx+1}</p>
+                            {gameStep>=idx
+                              ? <p style={{fontSize:'1.3rem',fontWeight:900,color:'#1d4ed8',lineHeight:1.5,margin:0}}>{task.q}</p>
+                              : <p style={{fontSize:'1.3rem',fontWeight:900,color:'#cbd5e1',fontStyle:'italic',margin:0}}>Locked</p>}
+                          </div>
+                          {active&&<button onClick={()=>{addScore(25);if(task.switchAfter)setSwitchModal(true);else setGameStep(s=>s+1);}} style={{background:'#16a34a',color:'white',padding:'1rem 2rem',borderRadius:'1.25rem',fontWeight:900,fontSize:'1.2rem',border:'none',cursor:'pointer',flexShrink:0,display:'flex',alignItems:'center',gap:'0.5rem'}}><Icons.Check size={22} color="white"/> Done!</button>}
+                          {done&&<Icons.Check size={36}/>}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+
+              {/* GRATITUDE GRID */}
+              {content.game.type==='gratitude' && (
+                <div style={{display:'flex',flexDirection:'column',gap:'1.25rem',paddingBottom:'2rem'}}>
+                  <GratitudeCaller students={students} currentLetter={ALPHABET[gratitudeLetter]}/>
+                  <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',background:'#fefce8',border:'2px solid #fde68a',padding:'1.25rem',borderRadius:'1.25rem'}}>
+                    <p style={{fontWeight:'bold',fontStyle:'italic',color:'#92400e',fontSize:'1rem',margin:0}}>Think about: friends, family, synagogue, yourself, being Jewish — or anything that matters!</p>
+                    <button onClick={exportGratitude} style={{background:'white',border:'2px solid #92400e',color:'#92400e',padding:'0.6rem 1.2rem',borderRadius:'0.75rem',fontWeight:900,cursor:'pointer',display:'flex',alignItems:'center',gap:'0.4rem',flexShrink:0,marginLeft:'1rem',fontSize:'0.9rem'}}>
+                      <Icons.Download size={18} color="#92400e"/> Export
+                    </button>
+                  </div>
+                  <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:'0.75rem'}}>
+                    {ALPHABET.map((letter,li)=>(
+                      <div key={letter} onClick={()=>setGratitudeLetter(li)}
+                        style={{background:'white',border:`2px solid ${gratitudeLetter===li?'#D4AF37':'#e2e8f0'}`,borderRadius:'0.75rem',padding:'0.75rem',display:'flex',flexDirection:'column',cursor:'pointer',background:gratitudeLetter===li?'#fefce8':'white',transition:'all 0.15s'}}>
+                        <span style={{fontSize:'1.5rem',fontWeight:900,color:gratitudeLetter===li?'#D4AF37':'#e2e8f0',marginBottom:'0.25rem'}}>{letter}</span>
+                        <input type="text" placeholder="..."
+                          value={gratitudeEntries[letter]||''}
+                          onChange={e=>setGratitudeEntries(p=>({...p,[letter]:e.target.value}))}
+                          onClick={e=>{e.stopPropagation();setGratitudeLetter(li);}}
+                          style={{border:'none',borderBottom:'2px solid #f1f5f9',outline:'none',fontSize:'1rem',fontWeight:'bold',color:'#1A365D',padding:'0.2rem 0',background:'transparent',width:'100%'}}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                  <button onClick={()=>{addScore(100);setGameState('finished');}} className="font-display"
+                    style={{width:'100%',background:'#1A365D',color:'white',padding:'2rem',borderRadius:'2rem',fontSize:'2.5rem',letterSpacing:'0.05em',border:'none',cursor:'pointer',marginTop:'1rem',boxShadow:'0 8px 24px rgba(26,54,93,0.3)'}}>
+                    FINISH JOURNEY TO SINAI
+                  </button>
+                </div>
+              )}
+
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* FOOTER NAV */}
+      <div style={{display:'flex',justifyContent:'center',gap:'0.75rem',background:'rgba(255,255,255,0.4)',padding:'0.75rem 1rem',borderRadius:'9999px',border:'2px solid #e2e8f0',flexWrap:'wrap'}}>
+        {WEEK_SEQUENCE.map(w=>(
+          <button key={w} onClick={()=>jumpToWeek(w)} title={WEEK_CONTENT[w].title}
+            style={{padding:'0.5rem 1.5rem',borderRadius:'1.25rem',fontWeight:900,border:'4px solid',cursor:'pointer',transition:'all 0.15s',fontSize:'0.85rem',
+              background:currentWeek===w?'#1A365D':'white',
+              color:currentWeek===w?'white':'#cbd5e1',
+              borderColor:currentWeek===w?'#1A365D':'#e2e8f0',
+              boxShadow:currentWeek===w?'0 4px 16px rgba(26,54,93,0.3)':'none'}}>
+            {w===33?'D33':w===28?'D28':w===29?'D29':`W${w}`}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>
